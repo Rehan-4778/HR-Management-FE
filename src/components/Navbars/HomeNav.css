@@ -1,0 +1,15 @@
+.nav {
+    @apply w-full px-4 py-1 border-b border-gray-200 fixed top-0 z-50;
+}
+
+.nav-logo {
+    @apply text-2xl font-bold text-primary;
+}
+
+.nav-item {
+    @apply text-quaternary hover:text-secondary px-3 py-2 rounded-md text-sm font-semibold;
+}
+
+.nav-button {
+    @apply w-32 justify-center items-center font-extrabold text-xs hover:bg-secondary hover:border-secondary hover:text-white tracking-widest;
+}
