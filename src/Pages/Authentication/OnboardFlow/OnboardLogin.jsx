@@ -1,20 +1,12 @@
 import React from "react";
 import { Formik } from "formik";
-import Input from "../../components/InputFields/Input";
-import Button from "../../components/Buttons/Button";
-import signInSchema from "../../formik/schemas/signInSchema";
-import Spacer from "../../components/Custom/Spacer";
+import Input from "../../../components/InputFields/Input";
+import Button from "../../../components/Buttons/Button";
+import signInSchema from "../../../formik/schemas/signInSchema";
+import Spacer from "../../../components/Custom/Spacer";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../store";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-const SigninPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const authState = useSelector((state) => state.auth);
-
+const OnboardLogin = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-center items-center h-screen">
@@ -27,23 +19,8 @@ const SigninPage = () => {
               initialValues={{ email: "", password: "" }}
               validateOnBlur={true}
               validationSchema={signInSchema}
-              onSubmit={async (values) => {
-                try {
-                  const response = await dispatch(login(values));
-
-                  if (response?.payload?.success) {
-                    toast.success(response?.payload?.message);
-                    navigate("/login/select-company");
-                  } else if (response?.error) {
-                    toast.error(
-                      response?.error?.message || "Invalid email or password"
-                    );
-                  }
-                } catch (err) {
-                  toast.error(
-                    err.message || "An error occurred. Please try again."
-                  );
-                }
+              onSubmit={(values) => {
+                alert(JSON.stringify(values, null, 2));
               }}
             >
               {({
@@ -102,7 +79,7 @@ const SigninPage = () => {
                     <p className="text-sm">
                       Don't have an account?{" "}
                       <Link
-                        to="/signup"
+                        to="onboard/signup"
                         className="text-primary hover:text-green1 font-medium transition duration-300 ease-in-out"
                       >
                         Sign Up
@@ -119,4 +96,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default OnboardLogin;

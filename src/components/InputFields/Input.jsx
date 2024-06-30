@@ -12,7 +12,7 @@ const Input = ({
   placeholder,
   error,
   className,
-  icon, // New prop for icon
+  style,
   ...rest
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +26,7 @@ const Input = ({
   return (
     <div>
       {label && (
-        <label htmlFor={name} className={`input-label ${error && "text-red"}`}>
+        <label htmlFor={name} className={`input_label ${error && "text_red"}`}>
           {label}
         </label>
       )}
@@ -38,8 +38,9 @@ const Input = ({
           onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}
-          className={`input-field ${error && "border-red"}`}
+          className={`input_field ${error && "border_red"}`}
           {...rest}
+          style={style}
         />
         {type === "password" && (
           <button
@@ -56,7 +57,7 @@ const Input = ({
         )}
       </div>
       <div className="h-4 mt-1">
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className="error_message">{error}</p>}
       </div>
     </div>
   );
