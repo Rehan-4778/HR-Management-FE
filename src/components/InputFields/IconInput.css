@@ -1,0 +1,27 @@
+.input-label {
+    @apply text-sm text-gray-700 font-normal select-none;
+}
+
+.input-field-container {
+    @apply mt-[2px];
+}
+
+.input-field {
+    @apply w-full px-3 border-[1.3px] h-[35px] border-gray-300 outline-none focus:border-tertiary placeholder-gray-500 text-sm shadow-sm rounded-sm focus:shadow-green1;
+}
+
+.error-message {
+    @apply text-xs text-red-500;
+}
+
+.text-red {
+    @apply text-danger;
+}
+
+.border-red {
+    @apply border-danger focus:border-danger;
+}
+
+.select-field {
+    @apply w-full px-3 h-[42px] border-[1.3px] mt-[2px] border-gray-300 rounded outline-none focus:border-tertiary placeholder-gray-500 text-sm;
+}

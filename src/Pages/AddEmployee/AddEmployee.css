@@ -1,0 +1,19 @@
+.btn-primary {
+    @apply bg-green-600 text-white py-2 px-4 rounded-md;
+}
+
+.btn-secondary {
+    @apply bg-green-400 text-white py-2 px-4 rounded-md;
+}
+
+.btn-tertiary {
+    @apply bg-gray-300 text-black py-2 px-4 rounded-md;
+}
+
+.access-box {
+    @apply w-1/2 flex mb-4 px-5 py-4 border-[1.25px] border-gray-300 rounded shadow-sm cursor-pointer
+}
+
+.access-box.active {
+    @apply border-[1.75px] border-green2 shadow-green1;
+}

@@ -14,6 +14,9 @@ export default {
         warning: "bg-yellow-500",
         danger: "#DC2626",
         green1: "#6A950A",
+
+        green2: "#80AD12",
+        green3: "#527A00",
       },
       fontFamily: {
         Inter: ["Inter"],

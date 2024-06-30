@@ -1,19 +1,23 @@
-.input-label {
+.input_label {
     @apply text-sm text-black font-medium select-none;
 }
 
-.input-field {
+.input_field {
     @apply w-full px-3 h-[42px] border-[1.3px] mt-[2px] border-gray-300 rounded outline-none focus:border-tertiary placeholder-gray-500 text-sm;
 }
 
-.error-message {
+.error_message {
     @apply text-xs text-red-500;
 }
 
-.text-red {
+.text_red {
     @apply text-danger;
 }
 
-.border-red {
+.border_red {
     @apply border-danger focus:border-danger;
+}
+
+.select_field {
+    @apply w-full px-3 h-[42px] border-[1.3px] mt-[2px] border-gray-300 rounded outline-none focus:border-tertiary placeholder-gray-500 text-sm;
 }
