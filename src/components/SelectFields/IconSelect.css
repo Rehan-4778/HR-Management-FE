@@ -1,0 +1,47 @@
+.custom-select-container {
+    @apply flex flex-col;
+}
+
+.custom-select-wrapper {
+    position: relative;
+}
+
+.custom-select-field {
+    @apply ps-3 mt-1 border-[1.3px] h-[35px] border-gray-300 outline-none placeholder-gray-500 text-sm shadow-sm rounded-sm cursor-pointer flex items-center justify-between;
+}
+
+.custom-select-field.active {
+    @apply border-b-gray-300 border-tertiary shadow-green1;
+}
+
+.icon-container {
+    @apply bg-gray-100 h-[33px] w-8 flex justify-center items-center;
+}
+
+.custom-select-dropdown {
+    @apply absolute w-full bg-white border border-gray-300 shadow-sm z-10 border-t-0;
+}
+
+.custom-select-dropdown.active {
+    @apply border-tertiary shadow-green1;
+}
+
+.custom-select-option {
+    @apply px-3 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer;
+}
+
+.custom-select-option:hover {
+    @apply bg-primary text-white;
+}
+
+.error-message {
+    @apply text-xs text-red-500;
+}
+
+.text-red {
+    @apply text-danger;
+}
+
+.border-red {
+    @apply border-danger focus:border-danger;
+}

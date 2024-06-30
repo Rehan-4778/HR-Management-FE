@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import "./App.css";
+import HomePage from "./Pages/Home/HomePage";
+import { Routes, Route } from "react-router-dom";
+import SigninPage from "./Pages/Authentication/SigninPage";
+import NotFoundPage from "./Pages/NotFound/NotFoundPage";
+import SignupPage from "./Pages/Authentication/SignupPage";
+import OnboardLogin from "./Pages/Authentication/OnboardFlow/OnboardLogin";
+import OnboardSignupPage from "./Pages/Authentication/OnboardFlow/OnboardSignup";
+import SelectCompanyPage from "./Pages/Authentication/SelectCompanyPage";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import DashboardHomePage from "./Pages/Dashboard/DashboardHomePage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        limit={1}
+      />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<SigninPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login/select-company" element={<SelectCompanyPage />} />
+
+        {/* Onboard Routes */}
+        {/* <Route path="/onboard" element={<HomePage />} /> */}
+        <Route path="/onboard/login" element={<OnboardLogin />} />
+        <Route path="/onboard/signup" element={<OnboardSignupPage />} />
+
+        {/* Dashboard Routes */}
+        <Route path="/:companyDomain/*" element={<Dashboard />} />
+
+        {/* Add route for not found Page */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
