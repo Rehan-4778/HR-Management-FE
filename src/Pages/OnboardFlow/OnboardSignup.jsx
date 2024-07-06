@@ -1,9 +1,9 @@
 import { Formik } from "formik";
-import signupSchema from "../../../formik/schemas/signupSchema";
-import Spacer from "../../../components/Custom/Spacer";
-import Input from "../../../components/InputFields/Input";
-import Button from "../../../components/Buttons/Button";
-import onboardSignupSchema from "../../../formik/schemas/onboardSignupSchema";
+import signupSchema from "../../formik/schemas/signupSchema";
+import Spacer from "../../components/Custom/Spacer";
+import Input from "../../components/InputFields/Input";
+import Button from "../../components/Buttons/Button";
+import onboardSignupSchema from "../../formik/schemas/onboardSignupSchema";
 import { Link } from "react-router-dom";
 
 const OnboardSignupPage = () => {

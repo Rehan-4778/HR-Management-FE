@@ -5,14 +5,14 @@ import { Routes, Route } from "react-router-dom";
 import SigninPage from "./Pages/Authentication/SigninPage";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import SignupPage from "./Pages/Authentication/SignupPage";
-import OnboardLogin from "./Pages/Authentication/OnboardFlow/OnboardLogin";
-import OnboardSignupPage from "./Pages/Authentication/OnboardFlow/OnboardSignup";
+import OnboardLogin from "./Pages/OnboardFlow/OnboardLogin";
+import OnboardSignupPage from "./Pages/OnboardFlow/OnboardSignup";
 import SelectCompanyPage from "./Pages/Authentication/SelectCompanyPage";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import DashboardHomePage from "./Pages/Dashboard/DashboardHomePage";
+import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
 
 function App() {
   return (
@@ -32,9 +32,12 @@ function App() {
         <Route path="/login/select-company" element={<SelectCompanyPage />} />
 
         {/* Onboard Routes */}
-        {/* <Route path="/onboard" element={<HomePage />} /> */}
-        <Route path="/onboard/login" element={<OnboardLogin />} />
-        <Route path="/onboard/signup" element={<OnboardSignupPage />} />
+        <Route path="/onboard/:onboardToken" element={<OnboardPage />} />
+        <Route path="/onboard/:onboardToken/login" element={<OnboardLogin />} />
+        <Route
+          path="/onboard/:onboardToken/signup"
+          element={<OnboardSignupPage />}
+        />
 
         {/* Dashboard Routes */}
         <Route path="/:companyDomain/*" element={<Dashboard />} />

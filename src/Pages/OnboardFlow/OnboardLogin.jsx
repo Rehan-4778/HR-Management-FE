@@ -1,9 +1,9 @@
 import React from "react";
 import { Formik } from "formik";
-import Input from "../../../components/InputFields/Input";
-import Button from "../../../components/Buttons/Button";
-import signInSchema from "../../../formik/schemas/signInSchema";
-import Spacer from "../../../components/Custom/Spacer";
+import Input from "../../components/InputFields/Input";
+import Button from "../../components/Buttons/Button";
+import signInSchema from "../../formik/schemas/signInSchema";
+import Spacer from "../../components/Custom/Spacer";
 import { Link } from "react-router-dom";
 
 const OnboardLogin = () => {
