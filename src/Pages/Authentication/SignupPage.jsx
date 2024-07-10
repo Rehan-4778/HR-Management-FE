@@ -38,7 +38,6 @@ const SignupPage = () => {
               validateOnBlur={true}
               validationSchema={signupSchema}
               onSubmit={async (values) => {
-                // don't send the confirmPassword field to the server
                 const { confirmPassword, ...rest } = values;
 
                 try {

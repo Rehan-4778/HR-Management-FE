@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import IconInput from "../../components/InputFields/IconInput";
 import IconSelect from "../../components/SelectFields/IconSelect";
 import { GoCheckCircleFill } from "react-icons/go";
@@ -9,7 +9,7 @@ import "./AddEmployee.css";
 import Modal from "../../components/Modals/Modal";
 import Input from "../../components/InputFields/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { createEmployee } from "../../store";
+import { createEmployee, sendOnboardingInvite } from "../../store";
 import { toast } from "react-toastify";
 
 const AddEmployee = () => {
@@ -17,6 +17,8 @@ const AddEmployee = () => {
   const [isEmailSelected, setIsEmailSelected] = useState(false);
   const [employeeEmail, setEmployeeEmail] = useState("");
   const [employeeEmailError, setEmployeeEmailError] = useState("");
+
+  const formikRef = useRef(null);
 
   const selectedCompany = useSelector((state) => state.auth.selectedCompany);
   const dispatch = useDispatch();
@@ -96,20 +98,56 @@ const AddEmployee = () => {
     { value: "california", label: "California" },
   ];
 
-  const handleSubmitEmail = () => {
+  const handleSubmitEmail = async () => {
     if (employeeEmail.trim() === "") {
       setEmployeeEmailError("Email is required");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(employeeEmail)) {
       setEmployeeEmailError("Invalid email format");
     } else {
-      setEmployeeEmail("");
-      setEmployeeEmailError("");
-      setIsModalOpen(false);
+      if (formikRef.current) {
+        const values = formikRef.current.values;
+        let newValues;
+        for (let key in values) {
+          if (values[key] !== "--Select--" || values[key].trim() !== "") {
+            newValues = { ...newValues, [key]: values[key] };
+          }
+        }
+
+        const response = await dispatch(
+          createEmployee({
+            companyId: selectedCompany.company._id,
+            ...newValues,
+          })
+        );
+
+        if (response.payload.success) {
+          const response2 = await dispatch(
+            sendOnboardingInvite({
+              email: employeeEmail,
+              companyId: selectedCompany.company._id,
+              employeeId: response.payload.employeeProfile.employeeId,
+            })
+          );
+
+          if (response2.payload.success) {
+            toast.success("Employee created successfully and email sent");
+            setEmployeeEmail("");
+            setEmployeeEmailError("");
+            setIsModalOpen(false);
+            // rest the form
+            formikRef.current.resetForm();
+          } else {
+            toast.error(response2?.payload?.error);
+          }
+        } else {
+          toast.error(response?.payload?.error);
+        }
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-white p-10">
+    <div className="min-h-screen bg-white p-10 mt-16">
       <div className="px-4" style={{ maxWidth: "1140px", margin: "0 auto" }}>
         <h1 className="text-3xl font-semibold mb-6 text-primary">
           New Employee
@@ -181,6 +219,7 @@ const AddEmployee = () => {
 
         {/* implemet using formik */}
         <Formik
+          innerRef={formikRef}
           initialValues={{
             employeeId: "",
             firstName: "",
@@ -235,6 +274,8 @@ const AddEmployee = () => {
             // Handle the response
             if (response.payload.success) {
               toast.success("Employee created successfully");
+              // reset the form
+              formikRef.current.resetForm();
             } else {
               toast.error(response?.payload?.error);
             }
@@ -661,11 +702,15 @@ const AddEmployee = () => {
 
               {/* Footer */}
               <div className="fixed bottom-0 left-0 right-0 bg-white px-10 py-5 shadow flex justify-start space-x-4">
-                <button className="bg-primary text-white px-4 h-[38px] rounded font-medium">
+                <button
+                  type="submit"
+                  className="bg-primary text-white px-4 h-[38px] rounded font-medium"
+                >
                   Save
                 </button>
                 {isEmailSelected && (
                   <button
+                    type="button"
                     className="border-[1.5px] px-5 h-[38px] border-primary rounded text-primary font-medium"
                     onClick={() => setIsModalOpen(true)}
                   >

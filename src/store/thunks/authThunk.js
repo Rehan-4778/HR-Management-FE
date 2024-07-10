@@ -53,7 +53,8 @@ export const selectCompany = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   try {
-    await axios.post(`${BASE_URL}/api/v1/auth/logout`);
+    const response = await axios.get(`${BASE_URL}/api/v1/auth/logout`);
+    return response.data;
   } catch (error) {
     throw error;
   }

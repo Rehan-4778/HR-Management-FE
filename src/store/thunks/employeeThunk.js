@@ -18,3 +18,19 @@ export const createEmployee = createAsyncThunk(
     }
   }
 );
+
+export const sendOnboardingInvite = createAsyncThunk(
+  "auth/sendOnboardingInvite",
+  async (data) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/onboard/sendOnboardingInvite`,
+        data
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);

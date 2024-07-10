@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createEmployee } from "../thunks/employeeThunk";
+import { createEmployee, sendOnboardingInvite } from "../thunks/employeeThunk";
 
 const employeeSlice = createSlice({
   name: "employee",
@@ -18,6 +18,18 @@ const employeeSlice = createSlice({
       state.employees = action.payload;
     });
     builder.addCase(createEmployee.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(sendOnboardingInvite.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(sendOnboardingInvite.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+    builder.addCase(sendOnboardingInvite.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message;
     });

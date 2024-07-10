@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 const DashboardNav = () => {
   const { companyDomain } = useParams();
   return (
-    <div className="flex items-center justify-between bg-gray-100 border-b-4 border-[#82af13] px-10">
+    <div className="flex items-center justify-between bg-gray-100 border-b-4 border-[#82af13] px-10 fixed top-0 w-full z-10">
       {/* Left Section */}
       <div className="flex items-center space-x-4 ">
         <div className="text-2xl font-bold">Logo</div>
