@@ -5,8 +5,18 @@ import Button from "../../components/Buttons/Button";
 import signInSchema from "../../formik/schemas/signInSchema";
 import Spacer from "../../components/Custom/Spacer";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { onboardLogin } from "../../store";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const OnboardLogin = () => {
+  const location = useLocation();
+  const baseUrl = location.pathname.split("/login")[0];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-center items-center h-screen">
@@ -19,15 +29,21 @@ const OnboardLogin = () => {
               initialValues={{ email: "", password: "" }}
               validateOnBlur={true}
               validationSchema={signInSchema}
-              onSubmit={(values) => {
-                alert(JSON.stringify(values, null, 2));
+              onSubmit={async (values) => {
+                const response = await dispatch(onboardLogin(values));
+
+                if (response?.payload?.success) {
+                  toast.success(response?.payload?.message);
+                  navigate(`${baseUrl}`);
+                } else if (response?.error) {
+                  toast.error(response?.error?.message);
+                }
               }}
             >
               {({
                 values,
                 handleChange,
                 handleSubmit,
-                setFieldError,
                 handleBlur,
                 errors,
                 touched,
@@ -79,7 +95,7 @@ const OnboardLogin = () => {
                     <p className="text-sm">
                       Don't have an account?{" "}
                       <Link
-                        to="onboard/signup"
+                        to={`${baseUrl}/signup`}
                         className="text-primary hover:text-green1 font-medium transition duration-300 ease-in-out"
                       >
                         Sign Up

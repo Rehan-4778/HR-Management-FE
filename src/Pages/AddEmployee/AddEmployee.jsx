@@ -134,6 +134,8 @@ const AddEmployee = () => {
             setEmployeeEmail("");
             setEmployeeEmailError("");
             setIsModalOpen(false);
+            // rest the form
+            formikRef.current.resetForm();
           } else {
             toast.error(response2?.payload?.error);
           }
@@ -145,7 +147,7 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-10">
+    <div className="min-h-screen bg-white p-10 mt-16">
       <div className="px-4" style={{ maxWidth: "1140px", margin: "0 auto" }}>
         <h1 className="text-3xl font-semibold mb-6 text-primary">
           New Employee
