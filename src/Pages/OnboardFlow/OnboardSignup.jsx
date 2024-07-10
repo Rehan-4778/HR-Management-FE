@@ -5,8 +5,21 @@ import Input from "../../components/InputFields/Input";
 import Button from "../../components/Buttons/Button";
 import onboardSignupSchema from "../../formik/schemas/onboardSignupSchema";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { onboardSignup } from "../../store";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const OnboardSignupPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const baseUrl = location.pathname.split("/signup")[0];
+  const onboardingToken = location.pathname
+    .split("/onboard/")[1]
+    .split("/signup")[0];
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-center items-center py-10">
@@ -26,11 +39,18 @@ const OnboardSignupPage = () => {
               }}
               validateOnBlur={true}
               validationSchema={onboardSignupSchema}
-              onSubmit={(values) => {
-                if (values.country === "Select...") {
-                  setFieldError("country", "*Please select a country");
+              onSubmit={async (values) => {
+                const newValues = {
+                  ...values,
+                  onboardingToken,
+                };
+                const response = await dispatch(onboardSignup(newValues));
+                if (response?.payload?.success) {
+                  toast.success(response?.payload?.message);
+                  navigate(`${baseUrl}`);
+                } else if (response?.error) {
+                  toast.error(response?.error?.message);
                 }
-                alert(JSON.stringify(values, null, 2));
               }}
             >
               {({
@@ -41,6 +61,7 @@ const OnboardSignupPage = () => {
                 handleBlur,
                 errors,
                 touched,
+                resetForm,
               }) => (
                 <form onSubmit={handleSubmit}>
                   <div className="flex">
@@ -157,7 +178,7 @@ const OnboardSignupPage = () => {
                     <p className="text-sm">
                       Already have an account?{" "}
                       <Link
-                        to="/onboard/login"
+                        to={`${baseUrl}/login`}
                         className="text-primary hover:text-green1 font-medium transition duration-300 ease-in-out"
                       >
                         Sign In

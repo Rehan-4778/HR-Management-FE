@@ -50,7 +50,8 @@ const IconSelect = ({
         >
           <span className="w-full flex justify-between items-center">
             {selectedOption
-              ? options.find((option) => option.value === selectedOption).label
+              ? options?.find((option) => option.value === selectedOption)
+                  ?.label
               : "--Select--"}
             <div className="icon-container">
               {isOpen ? (
@@ -63,7 +64,7 @@ const IconSelect = ({
         </div>
         {isOpen && (
           <div className={`custom-select-dropdown ${isOpen && "active"}`}>
-            {options.map((option) => (
+            {options?.map((option) => (
               <div
                 key={option.value}
                 className="custom-select-option"
