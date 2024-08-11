@@ -9,7 +9,11 @@ import "./AddEmployee.css";
 import Modal from "../../components/Modals/Modal";
 import Input from "../../components/InputFields/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { createEmployee, sendOnboardingInvite } from "../../store";
+import {
+  createEmployee,
+  getCompanyEmployeeNames,
+  sendOnboardingInvite,
+} from "../../store";
 import { toast } from "react-toastify";
 
 const AddEmployee = () => {
@@ -17,12 +21,41 @@ const AddEmployee = () => {
   const [isEmailSelected, setIsEmailSelected] = useState(false);
   const [employeeEmail, setEmployeeEmail] = useState("");
   const [employeeEmailError, setEmployeeEmailError] = useState("");
-
+  const [reportsToList, setReportsToList] = useState([]);
   const formikRef = useRef(null);
+
+  const {
+    department: departmentOptions,
+    division: divisionOptions,
+    employmentStatus: employmentStatusOptions,
+    jobTitle: jobTitleOptions,
+  } = useSelector((state) => state?.setting?.employeeFields);
 
   const selectedCompany = useSelector((state) => state.auth.selectedCompany);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+
+  const getReportsToList = async () => {
+    // call the api to get the reportsTo option
+    const response = await dispatch(
+      getCompanyEmployeeNames({ companyId: selectedCompany.company._id })
+    );
+
+    if (response?.payload?.success) {
+      const reportsToOptions = response.payload?.data?.map((employee) => ({
+        value: employee._id,
+        label: `${employee.firstName} ${employee?.middleName} ${employee.lastName}`,
+      }));
+
+      setReportsToList(reportsToOptions);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCompany.company._id) {
+      getReportsToList();
+    }
+  }, [selectedCompany.company._id]);
 
   const genderOptions = [
     { value: "", label: "--Select--" },
@@ -57,39 +90,6 @@ const AddEmployee = () => {
     { value: "hispanic", label: "Hispanic or Latino" },
     { value: "non-hispanic", label: "Not Hispanic or Latino" },
     { value: "other", label: "Other" },
-  ];
-
-  const employmentStatusOptions = [
-    { value: "", label: "--Select--" },
-    { value: "full-time", label: "Full-time" },
-    { value: "part-time", label: "Part-time" },
-    { value: "contract", label: "Contract" },
-  ];
-
-  const jobTitleOptions = [
-    { value: "", label: "--Select--" },
-    { value: "developer", label: "Developer" },
-    { value: "designer", label: "Designer" },
-    { value: "manager", label: "Manager" },
-  ];
-
-  const reportsToOptions = [
-    { value: "", label: "--Select--" },
-    { value: "manager", label: "Manager" },
-    { value: "director", label: "Director" },
-  ];
-
-  const departmentOptions = [
-    { value: "", label: "--Select--" },
-    { value: "engineering", label: "Engineering" },
-    { value: "design", label: "Design" },
-    { value: "hr", label: "HR" },
-  ];
-
-  const divisionOptions = [
-    { value: "", label: "--Select--" },
-    { value: "north", label: "North" },
-    { value: "south", label: "South" },
   ];
 
   const locationOptions = [
@@ -351,7 +351,7 @@ const AddEmployee = () => {
                     error={errors.dob && touched.dob}
                   />
                   <IconSelect
-                    width={250}
+                    width={200}
                     label="Gender"
                     name="gender"
                     options={genderOptions}
@@ -361,6 +361,7 @@ const AddEmployee = () => {
                     error={errors.gender && touched.gender}
                   />
                   <IconSelect
+                    width={200}
                     label="Marital Status"
                     name="maritalStatus"
                     options={maritalStatusOptions}
@@ -584,7 +585,9 @@ const AddEmployee = () => {
                   width={250}
                   name="employmentStatus"
                   options={employmentStatusOptions}
-                  onChange={handleChange}
+                  onChange={(value) => {
+                    setFieldValue("employmentStatus", value);
+                  }}
                   onBlur={handleBlur}
                   value={values.employmentStatus}
                   error={errors.employmentStatus && touched.employmentStatus}
@@ -600,7 +603,9 @@ const AddEmployee = () => {
                     label="Job Title"
                     name="jobTitle"
                     options={jobTitleOptions}
-                    onChange={handleChange}
+                    onChange={(value) => {
+                      setFieldValue("jobTitle", value);
+                    }}
                     onBlur={handleBlur}
                     value={values.jobTitle}
                     error={errors.jobTitle && touched.jobTitle}
@@ -609,7 +614,7 @@ const AddEmployee = () => {
                     width={200}
                     label="Reports To"
                     name="reportsTo"
-                    options={reportsToOptions}
+                    options={reportsToList}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.reportsTo}
@@ -622,7 +627,9 @@ const AddEmployee = () => {
                     label="Department"
                     name="department"
                     options={departmentOptions}
-                    onChange={handleChange}
+                    onChange={(value) => {
+                      setFieldValue("department", value);
+                    }}
                     onBlur={handleBlur}
                     value={values.department}
                     error={errors.department && touched.department}
@@ -632,17 +639,18 @@ const AddEmployee = () => {
                     label="Division"
                     name="division"
                     options={divisionOptions}
-                    onChange={handleChange}
+                    onChange={(value) => {
+                      setFieldValue("division", value);
+                    }}
                     onBlur={handleBlur}
                     value={values.division}
                     error={errors.division && touched.division}
                   />
                 </div>
-                <IconSelect
+                <IconInput
                   width={200}
                   label="Location"
                   name="location"
-                  options={locationOptions}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.location}
@@ -701,7 +709,7 @@ const AddEmployee = () => {
               </div>
 
               {/* Footer */}
-              <div className="fixed bottom-0 left-0 right-0 bg-white px-10 py-5 shadow flex justify-start space-x-4">
+              <div className="fixed bottom-0 left-0 right-0 bg-white px-10 py-5 shadow flex justify-start space-x-4 border-t">
                 <button
                   type="submit"
                   className="bg-primary text-white px-4 h-[38px] rounded font-medium"

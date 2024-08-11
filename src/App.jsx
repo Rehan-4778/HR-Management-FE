@@ -13,10 +13,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
+import Loader from "./components/Loaders/Loader";
 
 function App() {
   return (
     <div className="App">
+      <Loader />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -26,12 +28,11 @@ function App() {
         limit={1}
       />
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login/select-company" element={<SelectCompanyPage />} />
 
-        {/* Onboard Routes */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/onboard/:onboardToken" element={<OnboardPage />} />
         <Route path="/onboard/:onboardToken/login" element={<OnboardLogin />} />
         <Route

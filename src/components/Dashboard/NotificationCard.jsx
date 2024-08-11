@@ -2,64 +2,40 @@ import React, { useState } from "react";
 import NotificationItem from "./NotificationItem";
 import IconFileSignature from "../../assets/FileSignature";
 import Assessment from "../../assets/Assessment";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const NotificationCard = () => {
   const [hovered, setHovered] = useState(false);
+  const companyName = useSelector(
+    (state) => state?.auth?.selectedCompany?.company?.name
+  );
+  const navigate = useNavigate();
 
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
+  const pathName = window.location.pathname?.split("/")[0];
+
+  console.log("url", pathName);
+  const selectedCompany = useSelector(
+    (state) => state?.auth?.selectedCompany?.company?.domain
+  );
+  const notifications = useSelector((state) => state?.employee?.notifications);
+  console.log("notifications", notifications);
+  const employeeId = useSelector(
+    (state) => state?.auth?.selectedCompany?.profile?.employeeId
+  );
+
+  const icons = {
+    signature_request: {
       icon: <IconFileSignature color="#777" />,
       activeIcon: <IconFileSignature color="green" />,
-      title: "W-4 (2024) is waiting for your signature!",
-      time: "In 2 months",
-      link: "#",
     },
-    {
-      id: 2,
-      icon: "👤",
-      activeIcon: "👤",
-      title:
-        "Charlotte Abbott requested Jun 4–Jun 6 off – 40 hours of Vacation",
-      time: "In 2 months",
-      allowButton: true,
-      denyButton: true,
-      allowButtonAction: () => alert("Allow"),
-      denyButtonAction: () => alert("Deny"),
-    },
-    {
-      id: 3,
-      icon: <Assessment color="#777" />,
-      activeIcon: <Assessment color="green" />,
-      title: "Take a moment to complete your Employee Assessments.",
-      description:
-        "Complete the assessments on the Performance tab on each employee's profile. Please complete by Jun 30 (8 days ago).",
-      status: "PAST DUE",
-      buttonText: "Complete Now",
-      buttonAction: () => alert("Complete Now"),
-    },
-    {
-      id: 4,
-      icon: <Assessment color="#777" />,
-      activeIcon: <Assessment color="green" />,
-      title: "Take a few minutes to complete your Self Assessment.",
-      description: "Please complete your assessment by Jun 30 (8 days ago).",
-      status: "PAST DUE",
-    },
-    {
-      id: 5,
-      icon: <IconFileSignature color="#777" />,
-      activeIcon: <IconFileSignature color="green" />,
-      title: "Background_Check_Auth.pdf is waiting for your signature!",
-      time: "15 days ago",
-    },
-  ]);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-1 w-full">
       <div className="flex justify-between items-center mb-4 py-2 px-6 bg-gray-100 rounded-tl-md rounded-tr-md">
         <h2 className="text-lg font-semibold green">
-          What's happening at testa
+          What's happening at {companyName}
         </h2>
         <a
           href="#"
@@ -69,12 +45,25 @@ const NotificationCard = () => {
         </a>
       </div>
       <div className="space-y-4 px-6  h-[400px] overflow-y-scroll">
-        {notifications.map((notification, index) => (
+        {notifications?.map((notification) => (
           <NotificationItem
-            key={index}
+            key={notification._id}
             {...notification}
-            hovered={hovered === notification.id}
+            icons={icons[notification?.type] || {}}
+            hovered={hovered === notification._id}
             setHovered={setHovered}
+            onClick={() =>
+              navigate(
+                `${pathName}/${selectedCompany}/employee/${employeeId}/documents/${notification?.folderId?.name}
+                `,
+                {
+                  state: {
+                    folderId: notification?.folderId?._id,
+                    isNavigatedFromNotification: true,
+                  },
+                }
+              )
+            }
           />
         ))}
       </div>

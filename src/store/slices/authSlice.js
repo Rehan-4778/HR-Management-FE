@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login, signup, selectCompany, logout } from "../thunks/authThunk";
+import { updateCompanyInfo } from "../thunks/settingThunk";
 import {
   loadState,
   saveState,
@@ -79,6 +80,7 @@ const authSlice = createSlice({
       state.token = null;
       state.user = null;
       state.companies = [];
+      state.selectedCompany = null;
 
       clearState("storedState");
     });
@@ -94,13 +96,49 @@ const authSlice = createSlice({
     builder.addCase(selectCompany.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.companies = action.payload.companies;
       state.selectedCompany = action.payload.company;
 
       saveState("storedState", {
-        ...storedState,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+        user: state.user,
+        companies: state.companies,
         selectedCompany: action.payload.company,
       });
+    });
+    builder.addCase(selectCompany.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    });
+
+    builder.addCase(updateCompanyInfo.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateCompanyInfo.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+
+      state.selectedCompany = {
+        ...state.selectedCompany,
+        company: { ...action.payload.data.company },
+      };
+      state.companies = state.companies.map((company) =>
+        company._id === action.payload.data.company._id
+          ? action.payload.data.company
+          : company
+      );
+
+      saveState("storedState", {
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+        user: state.user,
+        companies: state.companies,
+        selectedCompany: action.payload.data.company,
+      });
+    });
+    builder.addCase(updateCompanyInfo.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
     });
   },
 });

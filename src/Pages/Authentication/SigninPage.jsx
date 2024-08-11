@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../store";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
 
 const SigninPage = () => {
   const dispatch = useDispatch();
@@ -29,8 +30,8 @@ const SigninPage = () => {
               validationSchema={signInSchema}
               onSubmit={async (values) => {
                 try {
+                  dispatch(showLoading());
                   const response = await dispatch(login(values));
-
                   if (response?.payload?.success) {
                     toast.success(response?.payload?.message);
                     navigate("/login/select-company");
@@ -43,6 +44,8 @@ const SigninPage = () => {
                   toast.error(
                     err.message || "An error occurred. Please try again."
                   );
+                } finally {
+                  dispatch(hideLoading());
                 }
               }}
             >

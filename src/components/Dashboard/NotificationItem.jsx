@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import moment from "moment/moment";
+import React from "react";
 import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 const NotificationItem = ({
-  id,
-  icon,
-  activeIcon,
-  title,
-  description,
-  time,
-  status,
-  link,
+  _id,
+  type,
+  folderId,
+  fileId,
+  createdBy,
+  createdFor,
+  message,
+  createdAt,
+  icons,
+  onClick,
   buttonText,
   buttonAction,
   allowButton,
@@ -20,37 +23,32 @@ const NotificationItem = ({
   hovered,
   setHovered,
 }) => {
+  console.log("icons", folderId, fileId);
   return (
     <div
       className="flex items-center space-x-4"
-      onMouseEnter={() => setHovered(id)}
+      onMouseEnter={() => setHovered(_id)}
       onMouseLeave={() => setHovered(-1)}
     >
-      <div className="text-3xl">{hovered ? activeIcon : icon}</div>
+      <div className="text-3xl">
+        {hovered ? icons?.activeIcon : icons?.icon}
+      </div>
       <div
         className={`flex items-center justify-between border-b py-4 min-h-16 w-full`}
       >
         <div className={`${hovered ? "mr-5" : ""}`}>
-          {link ? (
-            <a href={link} className="text-blue-500">
-              {title}
-            </a>
-          ) : (
-            <div className={hovered ? "text-blue-500" : "text-black"}>
-              {title}
-            </div>
-          )}
-          {description && (
-            <div className="text-sm text-gray-500">
-              {description}
-              {time && <span className="text-sm text-gray-500">{time}</span>}
-              {status && (
-                <span className="ml-2 text-[10px] font-semibold text-orange-600 border-orange-600 border p-[1.25px] px-[6px] mt-1 rounded-md">
-                  {status}
-                </span>
-              )}
-            </div>
-          )}
+          <div
+            className={hovered ? "text-blue-500 cursor-pointer" : "text-black"}
+            onClick={onClick}
+          >
+            {`${createdBy?.firstName} ${createdBy?.lastName} has requested a signature for a file`}
+          </div>
+          <div className="text-sm text-gray-500">
+            <span>{message}</span>
+          </div>
+          <span className="text-sm text-orange-600 font-medium">
+            {moment(createdAt).fromNow()}
+          </span>
         </div>
         {hovered && buttonText && buttonAction && (
           <button

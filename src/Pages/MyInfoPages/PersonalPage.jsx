@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaIdCard, FaTrash } from "react-icons/fa6";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
 import IconInput from "../../components/InputFields/IconInput";
 import IconSelect from "../../components/SelectFields/IconSelect";
-import InfoTable from "../../components/Tables/InfoTable";
+import EmployeeDetailTable from "../../components/Tables/EmployeeDetailTable";
+import Modal from "../../components/Modals/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  addEmployeeField,
+  deleteEmployeeField,
+  updateEmployeeField,
+  updatePersonalInfo,
+  uploadProfilePicture,
+} from "../../store";
+import VisaInfoModal from "../../components/Modals/VisaInfoModal";
+import { toast } from "react-toastify";
 
 const genderOptions = [
   { value: "male", label: "Male" },
@@ -12,53 +24,152 @@ const genderOptions = [
   { value: "other", label: "Other" },
 ];
 
-const [maritalStatusOptions] = [
+const maritalStatusOptions = [
   { value: "single", label: "Single" },
   { value: "married", label: "Married" },
   { value: "divorced", label: "Divorced" },
   { value: "widowed", label: "Widowed" },
 ];
 
-const PersonalPage = () => {
-  const initialValues = {
-    employeeId: "",
-    status: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    dob: "",
-    gender: "",
-    maritalStatus: "",
-    ssn: "",
-    street1: "",
-    street2: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-    workPhone: "",
-    mobilePhone: "",
-    workEmail: "",
-    homeEmail: "",
-    education: [
-      {
-        institution: "abc",
-        degree: "bachelors",
-        major: "abc",
-        startDate: "12/12/2012",
-        endDate: "12/12/2016",
-        gpa: "3.5",
-      },
-    ],
+const visaTableHeadings = [
+  "Date",
+  "Visa",
+  "Issuing Country",
+  "Issued",
+  "Expiration",
+  "Status",
+  "Note",
+];
+
+const PersonalPage = ({ newImage }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editItem, setEditItem] = useState(null);
+  const dispatch = useDispatch();
+  const companyId = useSelector(
+    (state) => state?.auth?.selectedCompany?.company?._id
+  );
+  const { degree } = useSelector((state) => state?.setting?.employeeFields);
+
+  const personalDetails = useSelector((state) => state?.employee?.userInfo);
+  const { employeeId } = useParams();
+
+  const handleSave = async (values) => {
+    await dispatch(
+      addEmployeeField({
+        employeeId,
+        companyId: companyId,
+        fieldName: "visaInfo",
+        fieldValue: values,
+      })
+    );
   };
 
-  const degreeOptions = [
-    { value: "highschool", label: "High School" },
-    { value: "associates", label: "Associates" },
-    { value: "bachelors", label: "Bachelors" },
-    { value: "masters", label: "Masters" },
-    { value: "phd", label: "PhD" },
-  ];
+  const handleDelete = async (id) => {
+    await dispatch(
+      deleteEmployeeField({
+        employeeId,
+        companyId,
+        fieldName: "visaInfo",
+        fieldId: id,
+      })
+    );
+  };
+
+  const handleEditModal = (values) => {
+    setEditItem(values);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = async (values) => {
+    setIsModalOpen(false);
+
+    let isUpdated = false;
+
+    let newValues = {
+      ...values,
+      date: new Date(values.date).toISOString(),
+      issuedDate:
+        values.issuedDate === ""
+          ? null
+          : new Date(values.issuedDate).toISOString(),
+      expirationDate:
+        values.expirationDate === ""
+          ? null
+          : new Date(values.expirationDate).toISOString(),
+    };
+
+    Object.keys(values).forEach((key) => {
+      if (editItem[key] !== newValues[key]) {
+        isUpdated = true;
+      }
+    });
+
+    if (!isUpdated) {
+      setEditItem(null);
+    } else {
+      await dispatch(
+        updateEmployeeField({
+          employeeId,
+          companyId,
+          fieldName: "visaInfo",
+          fieldId: editItem._id,
+          fieldValue: newValues,
+        })
+      );
+    }
+  };
+
+  const [initialValues, setInitialValues] = useState({
+    employeeId: personalDetails?.employeeId || "",
+    status: personalDetails?.loginAccess ? "active" : "inactive",
+    firstName: personalDetails?.firstName || "",
+    middleName: personalDetails?.middleName || "",
+    lastName: personalDetails?.lastName || "",
+    dob: personalDetails?.dob
+      ? new Date(personalDetails?.dob).toISOString().split("T")[0]
+      : "",
+    gender: personalDetails?.gender || "",
+    maritalStatus: personalDetails?.maritalStatus || "",
+    ssn: personalDetails?.ssn || "",
+    street1: personalDetails?.street1 || "",
+    street2: personalDetails?.street2 || "",
+    city: personalDetails?.city || "",
+    state: personalDetails?.state || "",
+    zip: personalDetails?.zip || "",
+    country: personalDetails?.country || "",
+    workPhone: personalDetails?.workPhone || "",
+    mobilePhone: personalDetails?.mobilePhone || "",
+    workEmail: personalDetails?.workEmail || "",
+    homeEmail: personalDetails?.homeEmail || "",
+    education: personalDetails?.education || [],
+  });
+
+  useEffect(() => {
+    setInitialValues({
+      employeeId: personalDetails?.employeeId || "",
+      status: personalDetails?.loginAccess ? "active" : "inactive",
+      firstName: personalDetails?.firstName || "",
+      middleName: personalDetails?.middleName || "",
+      lastName: personalDetails?.lastName || "",
+      dob: personalDetails?.dob
+        ? new Date(personalDetails?.dob).toISOString().split("T")[0]
+        : "",
+      gender: personalDetails?.gender || "",
+      maritalStatus: personalDetails?.maritalStatus || "",
+      ssn: personalDetails?.ssn || "",
+      street1: personalDetails?.street1 || "",
+      street2: personalDetails?.street2 || "",
+      city: personalDetails?.city || "",
+      state: personalDetails?.state || "",
+      zip: personalDetails?.zip || "",
+      country: personalDetails?.country || "",
+      workPhone: personalDetails?.workPhone || "",
+      mobilePhone: personalDetails?.mobilePhone || "",
+      workEmail: personalDetails?.workEmail || "",
+      homeEmail: personalDetails?.homeEmail || "",
+      education: personalDetails?.education || [],
+    });
+  }, [personalDetails]);
 
   const validationSchema = Yup.object({
     employeeId: Yup.string().required("Employee ID is required"),
@@ -71,10 +182,81 @@ const PersonalPage = () => {
     ssn: Yup.string()
       .required("SSN is required")
       .matches(/^\d{3}-\d{2}-\d{4}$/, "Invalid SSN format"),
+    street1: Yup.string().required("Street 1 is required"),
+    city: Yup.string().required("City is required"),
+    state: Yup.string().required("State is required"),
+    zip: Yup.string().required("Zip is required"),
+    country: Yup.string().required("Country is required"),
+    workPhone: Yup.string().required("Work Phone is required"),
+    mobilePhone: Yup.string(),
+    workEmail: Yup.string().email("Invalid email format"),
+    homeEmail: Yup.string(),
+    education: Yup.array().of(
+      Yup.object().shape({
+        institute: Yup.string().required("Institution is required"),
+        degree: Yup.string().required("Degree is required"),
+        major: Yup.string().required("Major is required"),
+        startDate: Yup.date().required("Start Date is required"),
+        endDate: Yup.date(),
+        gpa: Yup.number().required("GPA is required"),
+      })
+    ),
   });
 
-  const onSubmit = (values) => {
-    console.log("Form data", values);
+  const onSubmit = async (values) => {
+    const response = await dispatch(
+      updatePersonalInfo({ employeeId, companyId, personalInfo: values })
+    );
+
+    if (response.payload.success) {
+      toast.success("Profile updated successfully");
+    }
+  };
+
+  const isFormUpdated = (values) => {
+    // console.log("values", values);
+    // console.log("initialValues", initialValues);
+    let isUpdated = false;
+
+    Object.keys(values).forEach((key) => {
+      if (key !== "education" && initialValues[key] !== values[key]) {
+        isUpdated = true;
+        console.log("key", key, "updated here", isUpdated);
+      }
+    });
+
+    if (initialValues.education.length !== values.education.length) {
+      isUpdated = true;
+    } else {
+      initialValues?.education?.forEach((edu, index) => {
+        Object.keys(edu).forEach((key) => {
+          if (edu[key] !== values.education[index][key]) {
+            isUpdated = true;
+          }
+        });
+      });
+    }
+
+    return isUpdated;
+  };
+
+  const handleUploadProfileImage = async () => {
+    const formData = new FormData();
+    formData.append("image", newImage);
+    formData.append("companyId", companyId);
+
+    const response = await dispatch(
+      uploadProfilePicture({
+        employeeId,
+        formData,
+        // companyId,
+        // image: JSON.stringify(newImage),
+      })
+    );
+
+    if (response.payload.success) {
+      toast.success("Profile picture updated successfully");
+    }
   };
 
   return (
@@ -93,8 +275,16 @@ const PersonalPage = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
+            enableReinitialize
           >
-            {({ handleChange, handleBlur, values, errors, touched }) => (
+            {({
+              handleChange,
+              handleBlur,
+              values,
+              errors,
+              touched,
+              setFieldValue,
+            }) => (
               <Form>
                 <div className="flex gap-3">
                   <IconInput
@@ -107,12 +297,16 @@ const PersonalPage = () => {
                     value={values.employeeId}
                     error={errors.employeeId && touched.employeeId}
                   />
-                  <IconInput
+                  <IconSelect
                     width={150}
                     label="Status"
-                    type="text"
                     name="status"
-                    onChange={handleChange}
+                    options={[
+                      { value: "", label: "--Select--" },
+                      { value: "active", label: "Active" },
+                      { value: "inactive", label: "Inactive" },
+                    ]}
+                    onChange={(value) => setFieldValue("status", value)}
                     onBlur={handleBlur}
                     value={values.status}
                     error={errors.status && touched.status}
@@ -165,7 +359,7 @@ const PersonalPage = () => {
                     label="Gender"
                     name="gender"
                     options={genderOptions}
-                    onChange={handleChange}
+                    onChange={(value) => setFieldValue("gender", value)}
                     onBlur={handleBlur}
                     value={values.gender}
                     error={errors.gender && touched.gender}
@@ -175,7 +369,7 @@ const PersonalPage = () => {
                     label="Marital Status"
                     name="maritalStatus"
                     options={maritalStatusOptions}
-                    onChange={handleChange}
+                    onChange={(value) => setFieldValue("maritalStatus", value)}
                     onBlur={handleBlur}
                     value={values.maritalStatus}
                     error={errors.maritalStatus && touched.maritalStatus}
@@ -186,6 +380,7 @@ const PersonalPage = () => {
                   label="SSN"
                   type="text"
                   name="ssn"
+                  placeholder="xxx-xx-xxxx"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.ssn}
@@ -319,17 +514,17 @@ const PersonalPage = () => {
                               width={300}
                               label="College/Institution"
                               type="text"
-                              name={`education.${index}.institution`}
+                              name={`education.${index}.institute`}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={edu.institution}
+                              value={edu.institute}
                               error={
                                 errors.education &&
                                 errors.education[index] &&
-                                errors.education[index].institution &&
+                                errors.education[index].institute &&
                                 touched.education &&
                                 touched.education[index] &&
-                                touched.education[index].institution
+                                touched.education[index].institute
                               }
                             />
                             <button
@@ -346,10 +541,18 @@ const PersonalPage = () => {
                               width={150}
                               label="Degree"
                               name={`education.${index}.degree`}
-                              options={degreeOptions}
-                              onChange={handleChange}
+                              options={degree?.map((deg) => ({
+                                label: deg.label,
+                                value: deg.value,
+                              }))}
+                              onChange={(value) => {
+                                setFieldValue(
+                                  `education.${index}.degree`,
+                                  value
+                                );
+                              }}
                               onBlur={handleBlur}
-                              value={edu.degree}
+                              value={edu?.degree}
                               error={
                                 errors.education &&
                                 errors.education[index] &&
@@ -404,7 +607,13 @@ const PersonalPage = () => {
                               name={`education.${index}.startDate`}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={edu.startDate}
+                              value={
+                                edu.startDate
+                                  ? new Date(edu.startDate)
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : edu.startDate
+                              }
                               error={
                                 errors.education &&
                                 errors.education[index] &&
@@ -421,7 +630,13 @@ const PersonalPage = () => {
                               name={`education.${index}.endDate`}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={edu.endDate}
+                              value={
+                                edu.endDate
+                                  ? new Date(edu.endDate)
+                                      .toISOString()
+                                      .split("T")[0]
+                                  : edu.endDate
+                              }
                               error={
                                 errors.education &&
                                 errors.education[index] &&
@@ -439,7 +654,7 @@ const PersonalPage = () => {
                         className="text-blue-500"
                         onClick={() =>
                           push({
-                            institution: "",
+                            institute: "",
                             degree: "",
                             major: "",
                             startDate: "",
@@ -453,16 +668,62 @@ const PersonalPage = () => {
                     </div>
                   )}
                 </FieldArray>
-
-                <InfoTable />
-                <div className="mt-10">
+                <div className="w-full border my-5" />
+                <div className="mt-5 mb-3 flex justify-between">
+                  <div className=" flex items-center gap-3">
+                    <FaIdCard size={22} color="green" />
+                    <h2 className="text-lg font-semibold">Visa Information</h2>
+                  </div>
                   <button
-                    type="submit"
-                    className=" bg-green1 text-white p-2 rounded-sm text-sm px-3"
+                    type="button"
+                    className="text-sm font-medium text-gray-500"
+                    onClick={() => setIsModalOpen(true)}
                   >
-                    Update Profile
+                    + Add Entry
                   </button>
                 </div>
+                <EmployeeDetailTable
+                  headings={visaTableHeadings}
+                  list={personalDetails?.visaInfo || []}
+                  allowDelete
+                  allowEdit
+                  onDelete={handleDelete}
+                  onEdit={handleEditModal}
+                  isFixedValue={true}
+                />
+                <Modal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                >
+                  <VisaInfoModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSave}
+                    onEdit={handleEdit}
+                    visaInfo={editItem}
+                  />
+                </Modal>
+                {(isFormUpdated(values) || newImage) && (
+                  <div className="-ml-10 mt-10 fixed bottom-0 bg-white border-t border-gray-300 w-full h-20 flex items-center">
+                    {isFormUpdated(values) && (
+                      <button
+                        type="submit"
+                        className=" bg-green1 text-white py-2 rounded-sm text-sm font-medium px-4 mx-5"
+                      >
+                        Update Profile
+                      </button>
+                    )}
+                    {newImage && (
+                      <button
+                        type="button"
+                        className=" bg-green1 text-white py-2 rounded-sm text-sm font-medium px-4 mx-5"
+                        onClick={handleUploadProfileImage}
+                      >
+                        Update Profile Picture
+                      </button>
+                    )}
+                  </div>
+                )}
               </Form>
             )}
           </Formik>
