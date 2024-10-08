@@ -1,7 +1,6 @@
 .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
@@ -9,6 +8,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    overflow-y: hidden;
 }
 
 .modal-container {
@@ -33,4 +33,32 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
+}
+
+.modal {
+    @apply -mb-4 pl-5;
+}
+
+.modal-card-title {
+    @apply text-xl font-medium text-tertiary text-center;
+}
+
+.modal-card-body {
+    @apply my-5 self-center overflow-y-scroll max-h-[320px] border-b-2 border-green2;
+}
+
+.modal-card-foot {
+    @apply w-full mt-2;
+}
+
+.button {
+    @apply text-black py-[6px] px-4 rounded-sm cursor-pointer;
+}
+
+.button-success {
+    @apply bg-primary text-white text-sm font-medium;
+}
+
+.button-error {
+    @apply text-danger text-sm font-medium;
 }

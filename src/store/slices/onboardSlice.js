@@ -99,6 +99,8 @@ const onboardSlice = createSlice({
       state.user = null;
       state.token = null;
 
+      console.log("here");
+
       saveState("storedState", {
         token: null,
         isAuthenticated: false,

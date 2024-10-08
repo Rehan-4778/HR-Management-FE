@@ -13,10 +13,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
+import Loader from "./components/Loaders/Loader";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
     <div className="App">
+      <Loader />
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -26,12 +29,18 @@ function App() {
         limit={1}
       />
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login/select-company" element={<SelectCompanyPage />} />
+        <Route
+          path="/login/select-company"
+          element={
+            <ProtectedRoute>
+              <SelectCompanyPage />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Onboard Routes */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/onboard/:onboardToken" element={<OnboardPage />} />
         <Route path="/onboard/:onboardToken/login" element={<OnboardLogin />} />
         <Route
@@ -40,7 +49,14 @@ function App() {
         />
 
         {/* Dashboard Routes */}
-        <Route path="/:companyDomain/*" element={<Dashboard />} />
+        <Route
+          path="/:companyDomain/*"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Add route for not found Page */}
         <Route path="*" element={<NotFoundPage />} />

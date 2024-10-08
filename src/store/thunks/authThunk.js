@@ -1,9 +1,9 @@
-import { loadState } from "../../../utils/storageManager";
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
-const storedState = loadState("storedState");
+import { loadState } from "../../../utils/storageManager";
+
+import axios from "axios";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 export const login = createAsyncThunk("auth/login", async (data) => {
   try {
@@ -23,17 +23,14 @@ export const signup = createAsyncThunk("auth/signup", async (data) => {
     const response = await axios.post(`${BASE_URL}/api/v1/auth/register`, data);
     return response.data;
   } catch (error) {
-    if (error.response.status === 400) {
-      throw new Error(error.response.data.error);
-    } else {
-      throw error;
-    }
+    return error.response.data;
   }
 });
 
 export const selectCompany = createAsyncThunk(
   "auth/selectCompany",
   async (data) => {
+    const storedState = loadState("storedState");
     try {
       const response = await axios.post(
         `${BASE_URL}/api/v1/auth/selectCompany`,
@@ -46,7 +43,7 @@ export const selectCompany = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(error.response.data.error);
     }
   }
 );

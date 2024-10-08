@@ -1,63 +1,92 @@
-import React, { useState } from "react";
-import { BsFillPeopleFill } from "react-icons/bs";
+import React, { useState, useEffect } from "react";
+import { BsFillPeopleFill, BsList, BsPCircle } from "react-icons/bs";
 import EmployeeTable from "../../components/Tables/EmployeeTable";
+import { FaPlusCircle } from "react-icons/fa";
+import { VscTypeHierarchySub } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getCompanyEmployeesList } from "../../store";
+import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
 
 const PeoplePage = () => {
-  const [employees, setEmployees] = useState([
-    {
-      photoUrl:
-        "https://images7.bamboohr.com/620828/photos/8-19-4.jpg?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9pbWFnZXM3LmJhbWJvb2hyLmNvbS82MjA4MjgvKiIsIkNvbmRpdGlvbiI6eyJEYXRlR3JlYXRlclRoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyMDYzODMyNn0sIkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzIzMjMwMzM2fX19XX0_&Signature=L72CJVC6zePHVkxIkizNepigNEryR8F5qg7ZzPfPi6emRxvuSOdBT3vh681BgsuoyXE17W758UvHmtNIXzQvms9~NlZLNRhoWHbURwv7OVsjc4RixmObedz-4SN-eMaSuzH2QAzTF0m4iTzqm~LvX5hH0hFS4X0UMWdmts93FU6BBNU42O-N3v9JIQ3RaxAr0~pLrs55VqDUEmmrFL9kGSh0iAV2-dM1Q4Yr1CLJytwpDJ3OSo8qQcrQoY4U7s2u7rccRvMFUtqB-mNlsbZiCdsqJeitJjv5qX3w60LWIyKgR0HY5EAd6TZbDKsguYvCcWLc8iYwW4RBx5Nk3BX5Nw__&Key-Pair-Id=APKAIZ7QQNDH4DJY7K4Q",
-      employeeNumber: 1,
-      lastName: "Doe",
-      firstName: "John",
-      jobTitle: "Software Engineer",
-      location: "Lagos",
-      employmentStatus: "Full-Time",
-      hireDate: "2021-09-01",
-    },
-    {
-      photoUrl:
-        "https://images7.bamboohr.com/620828/photos/8-19-4.jpg?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9pbWFnZXM3LmJhbWJvb2hyLmNvbS82MjA4MjgvKiIsIkNvbmRpdGlvbiI6eyJEYXRlR3JlYXRlclRoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyMDYzODMyNn0sIkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzIzMjMwMzM2fX19XX0_&Signature=L72CJVC6zePHVkxIkizNepigNEryR8F5qg7ZzPfPi6emRxvuSOdBT3vh681BgsuoyXE17W758UvHmtNIXzQvms9~NlZLNRhoWHbURwv7OVsjc4RixmObedz-4SN-eMaSuzH2QAzTF0m4iTzqm~LvX5hH0hFS4X0UMWdmts93FU6BBNU42O-N3v9JIQ3RaxAr0~pLrs55VqDUEmmrFL9kGSh0iAV2-dM1Q4Yr1CLJytwpDJ3OSo8qQcrQoY4U7s2u7rccRvMFUtqB-mNlsbZiCdsqJeitJjv5qX3w60LWIyKgR0HY5EAd6TZbDKsguYvCcWLc8iYwW4RBx5Nk3BX5Nw__&Key-Pair-Id=APKAIZ7QQNDH4DJY7K4Q",
-      employeeNumber: 2,
-      lastName: "Doe",
-      firstName: "Jane",
-      jobTitle: "Product Manager",
-      location: "Lagos",
-      employmentStatus: "Full-Time",
-      hireDate: "2021-09-01",
-    },
-    {
-      photoUrl:
-        "https://images7.bamboohr.com/620828/photos/8-19-4.jpg?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9pbWFnZXM3LmJhbWJvb2hyLmNvbS82MjA4MjgvKiIsIkNvbmRpdGlvbiI6eyJEYXRlR3JlYXRlclRoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyMDYzODMyNn0sIkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzIzMjMwMzM2fX19XX0_&Signature=L72CJVC6zePHVkxIkizNepigNEryR8F5qg7ZzPfPi6emRxvuSOdBT3vh681BgsuoyXE17W758UvHmtNIXzQvms9~NlZLNRhoWHbURwv7OVsjc4RixmObedz-4SN-eMaSuzH2QAzTF0m4iTzqm~LvX5hH0hFS4X0UMWdmts93FU6BBNU42O-N3v9JIQ3RaxAr0~pLrs55VqDUEmmrFL9kGSh0iAV2-dM1Q4Yr1CLJytwpDJ3OSo8qQcrQoY4U7s2u7rccRvMFUtqB-mNlsbZiCdsqJeitJjv5qX3w60LWIyKgR0HY5EAd6TZbDKsguYvCcWLc8iYwW4RBx5Nk3BX5Nw__&Key-Pair-Id=APKAIZ7QQNDH4DJY7K4Q",
-      employeeNumber: 3,
-      lastName: "Smith",
-      firstName: "John",
-      jobTitle: "Software Engineer",
-      location: "Lagos",
-      employmentStatus: "Full-Time",
-      hireDate: "2021-09-01",
-    },
-    {
-      photoUrl:
-        "https://images7.bamboohr.com/620828/photos/8-19-4.jpg?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9pbWFnZXM3LmJhbWJvb2hyLmNvbS82MjA4MjgvKiIsIkNvbmRpdGlvbiI6eyJEYXRlR3JlYXRlclRoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcyMDYzODMyNn0sIkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzIzMjMwMzM2fX19XX0_&Signature=L72CJVC6zePHVkxIkizNepigNEryR8F5qg7ZzPfPi6emRxvuSOdBT3vh681BgsuoyXE17W758UvHmtNIXzQvms9~NlZLNRhoWHbURwv7OVsjc4RixmObedz-4SN-eMaSuzH2QAzTF0m4iTzqm~LvX5hH0hFS4X0UMWdmts93FU6BBNU42O-N3v9JIQ3RaxAr0~pLrs55VqDUEmmrFL9kGSh0iAV2-dM1Q4Yr1CLJytwpDJ3OSo8qQcrQoY4U7s2u7rccRvMFUtqB-mNlsbZiCdsqJeitJjv5qX3w60LWIyKgR0HY5EAd6TZbDKsguYvCcWLc8iYwW4RBx5Nk3BX5Nw__&Key-Pair-Id=APKAIZ7QQNDH4DJY7K4Q",
-      employeeNumber: 4,
-      lastName: "Smith",
-      firstName: "Jane",
-      jobTitle: "Product Manager",
-      location: "Lagos",
-      employmentStatus: "Full-Time",
-      hireDate: "2021-09-01",
-    },
-  ]);
+  const [activeTab, setActiveTab] = useState("list");
+  const navigate = useNavigate();
+  const { companyDomain } = useParams();
+  const selectedCompany = useSelector((state) => state.auth.selectedCompany);
+  const employeesList = useSelector((state) => state.employee.employees);
+  const dispatch = useDispatch();
+
+  console.log(employeesList);
+
+  const getEmployeesList = async () => {
+    try {
+      dispatch(showLoading());
+      const response = await dispatch(
+        getCompanyEmployeesList({ companyId: selectedCompany.company._id })
+      );
+
+      console.log(response);
+    } catch (error) {
+    } finally {
+      dispatch(hideLoading());
+    }
+  };
+
+  useEffect(() => {
+    getEmployeesList();
+  }, []);
+
+  const handleNavigate = () => {
+    navigate(`/${companyDomain}/employees/new`);
+  };
 
   return (
     <div className="mt-24 px-10 min-h-screen">
-      <div className="flex gap-3 ">
-        <BsFillPeopleFill size={30} />
-        <h1 className="text-3xl font-bold">People</h1>
+      <div className="flex gap-3 mb-5">
+        <BsFillPeopleFill size={30} className="text-green1" />
+        <h1 className="text-3xl font-semibold text-green1">People</h1>
       </div>
+
+      <div className="pt-3 border-b-[1.25px]">
+        <div className="mt-3 flex items-center justify-end relative">
+          <button
+            className="border-[1.25px] border-primary text-primary font-semibold px-4 py-[6px] rounded-sm flex gap-3 items-center absolute left-0 mb-10"
+            onClick={handleNavigate}
+          >
+            <FaPlusCircle size={16} color="text-primary" />
+            <span>New Employee</span>
+          </button>
+          <div className="pr-10 flex gap-10">
+            <div
+              className={`flex items-center  hover:text-secondary cursor-pointer pb-2 ${
+                activeTab === "list" && "border-b-2 border-secondary"
+              }`}
+              onClick={() => setActiveTab("list")}
+            >
+              <BsList size={20} className="text-secondary" />
+              <span className="ml-2 text-sm text-secondary font-semibold">
+                List
+              </span>
+            </div>
+
+            <div
+              className={`flex items-center hover:text-secondary cursor-pointer pb-2 ${
+                activeTab === "org" && "border-b-2 border-secondary "
+              }`}
+              onClick={() => setActiveTab("org")}
+            >
+              <VscTypeHierarchySub size={20} className="text-secondary" />
+              <span className="ml-2 text-sm text-secondary font-semibold">
+                Organization Chart
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="mt-5">
-        <EmployeeTable data={employees} />
+        <EmployeeTable data={employeesList} />
       </div>
     </div>
   );

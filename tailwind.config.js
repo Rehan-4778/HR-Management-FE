@@ -18,6 +18,7 @@ export default {
 
         green2: "#80AD12",
         green3: "#527A00",
+        greenLowOpacity: "#6cad2b86",
       },
       fontFamily: {
         Inter: ["Inter"],

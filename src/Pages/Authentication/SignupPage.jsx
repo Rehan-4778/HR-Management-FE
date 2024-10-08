@@ -9,6 +9,7 @@ import { signup } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
 
 const SignupPage = () => {
   const dispatch = useDispatch();
@@ -37,30 +38,25 @@ const SignupPage = () => {
               }}
               validateOnBlur={true}
               validationSchema={signupSchema}
-              onSubmit={async (values) => {
+              onSubmit={async (values, { resetForm }) => {
                 const { confirmPassword, ...rest } = values;
 
                 try {
+                  dispatch(showLoading());
                   const response = await dispatch(signup(rest));
 
-                  if (signup.fulfilled.match(response)) {
-                    if (response?.payload?.success) {
-                      navigate("/login/select-company");
-                      toast.success(response?.payload?.message);
-                      resetForm();
-                    } else {
-                      toast.error(response?.payload?.error);
-                    }
+                  if (response?.payload?.success) {
+                    navigate("/login/select-company");
+                    toast.success(response?.payload?.message);
+                    resetForm();
                   } else {
-                    if (response?.error) {
-                      toast.error(
-                        response?.error?.message ||
-                          "An error occurred. Please try again."
-                      );
-                    }
+                    toast.error(response?.payload?.error);
                   }
                 } catch (error) {
                   toast.error("An error occurred. Please try again.");
+                  console.log(error);
+                } finally {
+                  dispatch(hideLoading(false));
                 }
               }}
             >
@@ -70,7 +66,6 @@ const SignupPage = () => {
                 handleSubmit,
                 setFieldValue,
                 handleBlur,
-                resetForm,
                 errors,
                 touched,
               }) => (
