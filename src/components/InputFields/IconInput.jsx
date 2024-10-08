@@ -16,6 +16,7 @@ const IconInput = ({
   className,
   leftIcon,
   rightIcon,
+  multiLine,
   ...rest
 }) => {
   return (
@@ -36,16 +37,28 @@ const IconInput = ({
         style={{ width, height }}
       >
         {leftIcon && <span className="absolute left-3">{leftIcon}</span>}
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          className={`input-field  ${error && "border-red"}`}
-          {...rest}
-        />
+        {multiLine ? (
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            placeholder={placeholder}
+            className={`input-field  ${error && "border-red"}`}
+            {...rest}
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            placeholder={placeholder}
+            className={`input-field  ${error && "border-red"}`}
+            {...rest}
+          />
+        )}
         {rightIcon && <span className="absolute right-3">{rightIcon}</span>}
       </div>
       <div className="h-4 mt-1">

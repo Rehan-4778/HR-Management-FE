@@ -1,6 +1,5 @@
 import { loadState } from "../../../utils/storageManager";
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
-const storedState = loadState("storedState");
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -57,6 +56,7 @@ export const checkOnboardExpiry = createAsyncThunk(
 export const acceptOnboardingInvite = createAsyncThunk(
   "onboard/acceptOnboardingInvite",
   async (data) => {
+    const storedState = loadState("storedState");
     try {
       const response = await axios.post(
         `${BASE_URL}/api/v1/onboard/acceptOnboardingInvite`,

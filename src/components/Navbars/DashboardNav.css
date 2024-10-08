@@ -2,9 +2,26 @@
     @apply text-gray-500 hover:text-primary hover:bg-white transition duration-300 p-5 font-medium;
 }
 
-.nav-link-active {
-    @apply text-primary bg-white font-semibold;
+.nav_link {
+    @apply px-5 text-center;
 }
+
+.nav-link-active {
+    @apply text-primary bg-white font-semibold text-center;
+}
+
+.fixed_nav {
+    @apply fixed top-[68px] left-0 w-full z-50 bg-green1 shadow-md px-10 py-2;
+}
+
+.fixed_nav .nav_link {
+    @apply text-white hover:bg-greenLowOpacity px-4 rounded h-10;
+}
+
+.fixed_nav .nav-link-active {
+    @apply text-primary bg-white font-semibold rounded px-4 h-10;
+}
+
 
 .icon-button {
     @apply flex items-center justify-center w-6 h-10 rounded-full cursor-pointer;

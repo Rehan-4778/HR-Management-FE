@@ -10,6 +10,7 @@ const IconSelect = ({
   options,
   error,
   width,
+  disabled,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(value || "");
@@ -44,9 +45,13 @@ const IconSelect = ({
       <div className="custom-select-wrapper" style={{ width }}>
         <div
           className={`custom-select-field ${error && "border-red"} ${
-            isOpen && "active"
-          }`}
-          onClick={() => setIsOpen((prev) => !prev)}
+            disabled && "cursor-default"
+          } ${isOpen && "active"}`}
+          onClick={() => {
+            if (!disabled) {
+              return setIsOpen((prev) => !prev);
+            }
+          }}
         >
           <span className="w-full flex justify-between items-center">
             {selectedOption
@@ -67,7 +72,9 @@ const IconSelect = ({
             {options?.map((option) => (
               <div
                 key={option.value}
-                className="custom-select-option"
+                className={`custom-select-option ${
+                  selectedOption === option.value && "active"
+                }`}
                 onClick={() => handleOptionClick(option)}
               >
                 {option.label}

@@ -31,6 +31,10 @@
 }
 
 .custom-select-option:hover {
+    @apply bg-gray-200;
+}
+
+.custom-select-option.active {
     @apply bg-primary text-white;
 }
 
