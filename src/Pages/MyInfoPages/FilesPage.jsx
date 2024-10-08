@@ -4,7 +4,12 @@ import { useLocation, useParams } from "react-router-dom";
 import FileUploadModal from "../../components/Modals/FileUploadModal";
 import { Modal } from "@mui/material";
 import FileCard from "../../components/Cards/FileCard";
-import { getDocuments, getSignableDocuments, uploadFile } from "../../store";
+import {
+  deleteFile,
+  getDocuments,
+  getSignableDocuments,
+  uploadFile,
+} from "../../store";
 import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
 import { toast } from "react-toastify";
 
@@ -58,8 +63,19 @@ const FilesPage = () => {
     const response = await dispatch(
       uploadFile({ formData, employeeId, folderId })
     );
-    if(response?.payload?.success) {
+    if (response?.payload?.success) {
       toast.success("File uploaded successfully");
+      fetchDocuments();
+    }
+  };
+
+  const handleDeleteFile = async (fileId) => {
+    const response = await dispatch(
+      deleteFile({companyId, employeeId, folderId, fileId })
+    );
+
+    if (response?.payload?.success) {
+      toast.success("File deleted successfully");
       fetchDocuments();
     }
   };
@@ -128,7 +144,9 @@ const FilesPage = () => {
                 <FileCard
                   key={file._id}
                   file={file}
-                  onDelete={() => {}}
+                  onDelete={() => {
+                    handleDeleteFile(file._id);
+                  }}
                   onClick={() => {
                     window.open(file.url, "_blank");
                   }}

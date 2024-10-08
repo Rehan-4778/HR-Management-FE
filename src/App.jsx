@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
 import Loader from "./components/Loaders/Loader";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
@@ -30,7 +31,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login/select-company" element={<SelectCompanyPage />} />
+        <Route
+          path="/login/select-company"
+          element={
+            <ProtectedRoute>
+              <SelectCompanyPage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/" element={<HomePage />} />
         <Route path="/onboard/:onboardToken" element={<OnboardPage />} />
@@ -41,7 +49,14 @@ function App() {
         />
 
         {/* Dashboard Routes */}
-        <Route path="/:companyDomain/*" element={<Dashboard />} />
+        <Route
+          path="/:companyDomain/*"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Add route for not found Page */}
         <Route path="*" element={<NotFoundPage />} />

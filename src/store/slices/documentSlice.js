@@ -3,6 +3,7 @@ import {
   getDocuments,
   createDocument,
   uploadFile,
+  deleteFile,
 } from "../thunks/documentsThunk";
 import {
   loadState,
@@ -70,6 +71,20 @@ const documentSlice = createSlice({
       state.error = action.error
         ? action.error.message
         : "Failed to upload file";
+    });
+
+    builder.addCase(deleteFile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteFile.fulfilled, (state) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+    builder.addCase(deleteFile.rejected, (state) => {
+      state.isLoading = false;
+      state.error = action.error
+        ? action.error.message
+        : "Failed to delete file";
     });
   },
 });

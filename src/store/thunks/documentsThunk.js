@@ -72,3 +72,28 @@ export const uploadFile = createAsyncThunk(
     }
   }
 );
+
+export const deleteFile = createAsyncThunk(
+  "documents/deleteFile",
+  async (data) => {
+    const storedState = loadState("storedState");
+    console.log(storedState);
+    const { companyId, employeeId, folderId, fileId } = data;
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/v1/employee/${employeeId}/folders/${folderId}/files/${fileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+            "Content-Type": "application/json",
+          },
+          data: { companyId },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
