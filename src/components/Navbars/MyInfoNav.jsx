@@ -44,7 +44,7 @@ const MyInfoNav = ({ user }) => {
       <NavLink
         to={`/${companyDomain}/employee/${employeeId}/personal`}
         className={({ isActive }) =>
-          `p-2 min-w-16  rounded-tl-md rounded-tr-md ${
+          `p-2 min-w-16 rounded-tl-md rounded-tr-md ${
             isActive ||
             window.location.pathname ===
               `/${companyDomain}/employee/${employeeId}`
@@ -107,7 +107,7 @@ const MyInfoNav = ({ user }) => {
       >
         Assets
       </NavLink>
-      <NavLink
+      {/* <NavLink
         to={`/${companyDomain}/employee/${employeeId}/notes`}
         className={({ isActive }) =>
           `p-2 min-w-16  rounded-tl-md rounded-tr-md ${
@@ -116,7 +116,7 @@ const MyInfoNav = ({ user }) => {
         }
       >
         Notes
-      </NavLink>
+      </NavLink> */}
 
       {/* <NavLink
         to={`/${companyDomain}/employee/${employeeId}/onboarding`}

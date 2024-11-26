@@ -97,3 +97,25 @@ export const deleteFile = createAsyncThunk(
     }
   }
 );
+
+export const getAllFiles = createAsyncThunk(
+  "documents/getAllFiles",
+  async (data) => {
+    const { companyId } = data;
+    try {
+      const storedState = loadState("storedState");
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/employee/${companyId}/allFoldersAndFiles`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);

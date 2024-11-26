@@ -13,6 +13,7 @@ import {
   getSignableDocuments,
   requestSignature,
   getNotifications,
+  deleteEmployee,
 } from "../thunks/employeeThunk";
 
 const employeeSlice = createSlice({
@@ -20,6 +21,7 @@ const employeeSlice = createSlice({
   initialState: {
     isLoading: false,
     error: null,
+    isOwner: false,
     employees: [],
     userInfo: {},
     signableDocuments: [],
@@ -34,6 +36,7 @@ const employeeSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.employees = action.payload.data;
+      state.isOwner = action.payload.isOwner;
     });
     builder.addCase(getCompanyEmployeesList.rejected, (state, action) => {
       state.isLoading = false;
@@ -194,6 +197,18 @@ const employeeSlice = createSlice({
       state.notifications = action.payload.data;
     });
     builder.addCase(getNotifications.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error?.message;
+    });
+
+    builder.addCase(deleteEmployee.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteEmployee.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    });
+    builder.addCase(deleteEmployee.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error?.message;
     });

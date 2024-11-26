@@ -40,11 +40,11 @@ const SettingPrimaryNav = () => {
       icon: <FaCalendarAlt className="text-gray-600" size={18} />,
       activeIcon: <FaCalendarAlt className="text-white" size={18} />,
     },
-    {
-      name: "Time Offs",
-      icon: <FaCalendarAlt className="text-gray-600" size={18} />,
-      activeIcon: <FaCalendarAlt className="text-white" size={18} />,
-    },
+    // {
+    //   name: "Time Offs",
+    //   icon: <FaCalendarAlt className="text-gray-600" size={18} />,
+    //   activeIcon: <FaCalendarAlt className="text-white" size={18} />,
+    // },
   ];
 
   return (

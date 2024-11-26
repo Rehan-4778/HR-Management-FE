@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import User from "../../assets/images/people.png";
 
 const EmployeeTable = ({ data }) => {
   const navigate = useNavigate();
@@ -28,10 +29,7 @@ const EmployeeTable = ({ data }) => {
             <tr key={index} className="text-left border-b border-gray-200">
               <td className="py-3 ps-3">
                 <img
-                  src={
-                    employee?.image ||
-                    "https://static-00.iconduck.com/assets.00/profile-user-icon-512x512-nm62qfu0.png"
-                  }
+                  src={employee?.image || User}
                   alt="Employee"
                   className="w-20 h-20 rounded-full"
                 />

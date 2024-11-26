@@ -126,10 +126,10 @@ const DashboardHomePage = () => {
             <FaUserPlus className="mr-2" />
             New Employee
           </Link>
-          <button className="btn-outline">
+          {/* <button className="btn-outline">
             <FaEdit className="mr-2" />
             Edit
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="p-8 grid grid-cols-12 gap-5 -mt-28 w-full">

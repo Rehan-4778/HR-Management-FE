@@ -129,7 +129,7 @@ const CompanyInfoPage = () => {
                     loading="lazy"
                     alt="User"
                     quality="50"
-                    className="w-full h-full rounded-full object-cover"
+                    className="w-full h-full rounded-full object-contain"
                   />
 
                   {isProfilePicHovered && isEditing && (

@@ -216,9 +216,7 @@ const JobPage = ({ reportsToList }) => {
                 <div className="flex justify-between items-center  border-t border-gray-400 my-5 pt-5">
                   <div className="flex gap-3">
                     <FaBriefcase size={22} color="green" />
-                    <h2 className="text-lg font-semibold">
-                      Employeement Status
-                    </h2>
+                    <h2 className="text-lg font-semibold">Employment Status</h2>
                   </div>
                   <button
                     type="button"

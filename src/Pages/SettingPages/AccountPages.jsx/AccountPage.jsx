@@ -6,8 +6,9 @@ import CompanyInfoPage from "./CompanyInfoPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanyInfo } from "../../../store";
 import { hideLoading, showLoading } from "../../../store/slices/loadingSlice";
+import CompanyEmployees from "./CompanyEmployees";
 
-const secondaryNavItems = ["Company Info"];
+const secondaryNavItems = ["Company Info", "Employees"];
 
 const AccountPage = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ const AccountPage = () => {
             <Routes>
               <Route path="/" element={<CompanyInfoPage />} />
               <Route path="/company-info" element={<CompanyInfoPage />} />
+              <Route path="/employees" element={<CompanyEmployees />} />
             </Routes>
             <Outlet />
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaSearch, FaBell, FaCog } from "react-icons/fa";
 import "./DashboardNav.css";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,10 @@ const DashboardNav = () => {
   const employeeId = useSelector(
     (state) => state?.auth?.selectedCompany?.profile?.employeeId
   );
+  const companyLogo = useSelector(
+    (state) => state?.auth?.selectedCompany?.company?.image
+  );
+
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const settingsIconRef = useRef(null);
@@ -43,7 +47,16 @@ const DashboardNav = () => {
     <div className="flex items-center justify-between bg-gray-100 border-b-4 border-[#82af13] px-10 fixed top-0 w-full z-10">
       {/* Left Section */}
       <div className="flex items-center space-x-4 ">
-        <div className="text-2xl font-bold">Logo</div>
+        {
+          <Link to={`/${companyDomain}/home`}>
+            <img
+              src={companyLogo}
+              alt="Company Logo"
+              className="w-24 h-12 object-contain"
+            />
+          </Link>
+          // <div className="text-2xl font-bold">Logo</div>
+        }
         <nav className="flex">
           <NavLink
             to={`/${companyDomain}/home`}
@@ -89,10 +102,7 @@ const DashboardNav = () => {
           />
           <FaSearch className="absolute top-2.5 left-3 text-gray-500" />
         </div>
-        <NavLink className="icon-button"
-          to={`/${companyDomain}/requests`}
-          
-        >
+        <NavLink className="icon-button" to={`/${companyDomain}/requests`}>
           <FaInbox size={25} className=" text-tertiary" />
         </NavLink>
         <div
@@ -109,7 +119,7 @@ const DashboardNav = () => {
               ref={dropdownRef}
             >
               <NavLink
-                to={`/${companyDomain}/settings`}
+                to={`/${companyDomain}/settings/account/company-info`}
                 className="dropdown-link py-2 px-3 hover:bg-green1 hover:text-white"
               >
                 Settings

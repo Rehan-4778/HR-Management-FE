@@ -286,3 +286,25 @@ export const getNotifications = createAsyncThunk(
     }
   }
 );
+
+export const deleteEmployee = createAsyncThunk(
+  "employee/deleteEmployee",
+  async ({ companyId, employeeId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/v1/employee/deleteEmployee/${employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+          data: { companyId },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);

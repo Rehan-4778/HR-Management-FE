@@ -4,6 +4,7 @@ import {
   createDocument,
   uploadFile,
   deleteFile,
+  getAllFiles,
 } from "../thunks/documentsThunk";
 import {
   loadState,
@@ -19,6 +20,7 @@ const documentSlice = createSlice({
     isLoading: false,
     error: null,
     documents: [],
+    files: [],
   },
 
   extraReducers: (builder) => {
@@ -85,6 +87,21 @@ const documentSlice = createSlice({
       state.error = action.error
         ? action.error.message
         : "Failed to delete file";
+    });
+
+    builder.addCase(getAllFiles.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllFiles.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      state.files = action.payload.data;
+    });
+    builder.addCase(getAllFiles.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error
+        ? action.error.message
+        : "Failed to fetch documents";
     });
   },
 });
