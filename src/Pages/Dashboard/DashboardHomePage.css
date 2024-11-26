@@ -1,0 +1,16 @@
+/* src/DashboardHomePage.css */
+.dashboard-home-page {
+    height: 200px;
+}
+
+.btn {
+    @apply flex items-center bg-gray-50 text-green-600 font-semibold py-2 px-4 rounded shadow hover:bg-gray-100 transition duration-300;
+}
+
+.btn-outline {
+    @apply flex items-center bg-transparent text-gray-50 border-gray-50 border font-semibold py-2 px-4 rounded;
+}
+
+.logo {
+    @apply flex items-center justify-center;
+}

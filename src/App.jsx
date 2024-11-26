@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-=======
 import React from "react";
 import "./App.css";
 import HomePage from "./Pages/Home/HomePage";
@@ -21,38 +15,9 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
 import Loader from "./components/Loaders/Loader";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import NavigateToHome from "./components/ProtectedRoute/NavigateToHome";
->>>>>>> Stashed changes
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-<<<<<<< Updated upstream
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-=======
     <div className="App">
       <Loader />
       <ToastContainer
@@ -64,22 +29,8 @@ function App() {
         limit={1}
       />
       <Routes>
-        <Route
-          path="/login"
-          element={
-            <NavigateToHome>
-              <SigninPage />
-            </NavigateToHome>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <NavigateToHome>
-              <SignupPage />
-            </NavigateToHome>
-          }
-        />
+        <Route path="/login" element={<SigninPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route
           path="/login/select-company"
           element={
@@ -112,7 +63,6 @@ function App() {
       </Routes>
     </div>
   );
->>>>>>> Stashed changes
 }
 
-export default App
+export default App;

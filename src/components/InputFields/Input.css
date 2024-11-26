@@ -1,0 +1,23 @@
+.input_label {
+    @apply text-sm text-black font-medium select-none;
+}
+
+.input_field {
+    @apply w-full px-3 h-[42px] border-[1.3px] mt-[2px] border-gray-300 rounded outline-none focus:border-tertiary placeholder-gray-500 text-sm;
+}
+
+.error_message {
+    @apply text-xs text-red-500;
+}
+
+.text_red {
+    @apply text-danger;
+}
+
+.border_red {
+    @apply border-danger focus:border-danger;
+}
+
+.select_field {
+    @apply w-full px-3 h-[42px] border-[1.3px] mt-[2px] border-gray-300 rounded outline-none focus:border-tertiary placeholder-gray-500 text-sm;
+}
