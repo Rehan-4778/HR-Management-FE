@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import IconInput from "../../components/InputFields/IconInput";
 import IconSelect from "../../components/SelectFields/IconSelect";
 import { GoCheckCircleFill } from "react-icons/go";
@@ -15,6 +15,8 @@ import {
   sendOnboardingInvite,
 } from "../../store";
 import { toast } from "react-toastify";
+import { Select } from "@mui/material";
+import countryList from "react-select-country-list";
 
 const AddEmployee = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +25,7 @@ const AddEmployee = () => {
   const [employeeEmailError, setEmployeeEmailError] = useState("");
   const [reportsToList, setReportsToList] = useState([]);
   const formikRef = useRef(null);
+  const countryOptions = useMemo(() => countryList().getData(), []);
 
   const {
     department: departmentOptions,
@@ -439,15 +442,20 @@ const AddEmployee = () => {
                     value={values.zip}
                     error={errors.zip && touched.zip}
                   />
-                  <IconInput
+                  <IconSelect
                     width={150}
                     label="Country"
-                    type="text"
                     name="country"
-                    onChange={handleChange}
+                    type="text"
+                    onChange={(value) => setFieldValue("country", value)}
+                    options={[
+                      { label: "Select Country", value: "" },
+                      ...countryOptions,
+                    ]}
+                    labelAsValue={true}
                     onBlur={handleBlur}
                     value={values.country}
-                    error={errors.country && touched.country}
+                    error={touched.country && errors.country}
                   />
                 </div>
               </div>
@@ -678,7 +686,7 @@ const AddEmployee = () => {
                     </span>
                     <div>
                       <h3 className="font-semibold">
-                        Allow Access to BambooHR
+                        Allow Access to HR System
                       </h3>
                       <p className="text-sm mt-1 w-11/12 select-none">
                         They will be able to login to HR System using the access

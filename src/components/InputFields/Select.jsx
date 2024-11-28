@@ -10,6 +10,7 @@ const Select = ({
   error,
   options,
   className,
+  labelAsValue = false,
 }) => {
   return (
     <div className={`flex flex-col ${className}`}>
@@ -26,8 +27,15 @@ const Select = ({
         onBlur={onBlur}
         className={`select-field ${error && "border-red"}`}
       >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
+        {options?.map((option, index) => (
+          <option
+            key={option.value}
+            value={
+              labelAsValue && !option.label.toString().includes("Select")
+                ? option.label
+                : option.value
+            }
+          >
             {option.label}
           </option>
         ))}

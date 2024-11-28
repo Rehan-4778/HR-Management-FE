@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { FaCaretDown, FaCaretUp, FaExclamationCircle } from "react-icons/fa";
 import "./IconSelect.css";
 
 const IconSelect = ({
@@ -11,14 +11,28 @@ const IconSelect = ({
   error,
   width,
   disabled,
+  labelAsValue = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(value || "");
   const selectRef = useRef(null);
 
+  useEffect(() => {
+    if (labelAsValue)
+      setSelectedOption(
+        options?.find((country) => country.label === value)?.value
+      );
+  }, [value]);
+
+  const [searchInput, setSearchInput] = useState("");
+
   const handleOptionClick = (option) => {
     setSelectedOption(option.value);
-    onChange(option.value);
+    if (labelAsValue && !option.label.toString().includes("Select")) {
+      onChange(option.label);
+    } else {
+      onChange(option.value);
+    }
     setIsOpen(false);
   };
 
@@ -28,20 +42,58 @@ const IconSelect = ({
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (!isOpen || disabled) return;
+
+    if (/^[a-zA-Z0-9\s]$/.test(event.key)) {
+      clearTimeout(handleKeyDown.timer);
+      setSearchInput((prev) => prev + event.key);
+      // alert(searchInput);
+      handleKeyDown.timer = setTimeout(() => setSearchInput(""), 1000);
+    }
+  };
+
+  useEffect(() => {
+    if (searchInput) {
+      const matchingOption = options.find((option) =>
+        option.label.toLowerCase().startsWith(searchInput.toLowerCase())
+      );
+      if (matchingOption) {
+        setSelectedOption(matchingOption.value);
+        if (
+          labelAsValue &&
+          !matchingOption.label.toString().includes("Select")
+        ) {
+          onChange(matchingOption.label);
+        } else {
+          onChange(matchingOption.value);
+        }
+      }
+    }
+  }, [searchInput]);
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   return (
     <div className="custom-select-container" ref={selectRef}>
-      {label && (
-        <label htmlFor={name} className={`input-label ${error && "text-red"}`}>
-          {label}
-        </label>
-      )}
+      <div className="flex items-center">
+        {error && <FaExclamationCircle className="text-danger" />}
+        {label && (
+          <label
+            htmlFor={name}
+            className={`input-label ${error && "ml-1 text-red font-medium"}`}
+          >
+            {label}
+          </label>
+        )}
+      </div>
       <div className="custom-select-wrapper" style={{ width }}>
         <div
           className={`custom-select-field ${error && "border-red"} ${

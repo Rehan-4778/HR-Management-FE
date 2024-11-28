@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FaIdCard, FaTrash } from "react-icons/fa6";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -17,6 +17,7 @@ import {
 } from "../../store";
 import VisaInfoModal from "../../components/Modals/VisaInfoModal";
 import { toast } from "react-toastify";
+import countryList from "react-select-country-list";
 
 const genderOptions = [
   { value: "male", label: "Male" },
@@ -42,6 +43,8 @@ const visaTableHeadings = [
 ];
 
 const PersonalPage = ({ newImage }) => {
+  const countryOptions = useMemo(() => countryList().getData(), []);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const dispatch = useDispatch();
@@ -173,6 +176,7 @@ const PersonalPage = ({ newImage }) => {
 
   const validationSchema = Yup.object({
     employeeId: Yup.string().required("Employee ID is required"),
+    status: Yup.string().required("Status is required"),
     firstName: Yup.string().required("First Name is required"),
     middleName: Yup.string(),
     lastName: Yup.string().required("Last Name is required"),
@@ -442,15 +446,21 @@ const PersonalPage = ({ newImage }) => {
                     />
                   </div>
                   <div className="flex gap-3">
-                    <IconInput
+                    <IconSelect
                       width={200}
-                      label="Country"
-                      type="text"
-                      name="country"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                      label={"Country"}
+                      name={"country"}
                       value={values.country}
+                      onChange={(val) => {
+                        setFieldValue("country", val);
+                      }}
+                      onBlur={handleBlur}
                       error={errors.country && touched.country}
+                      options={[
+                        { label: "Select Country", value: "" },
+                        ...countryOptions,
+                      ]}
+                      labelAsValue={true}
                     />
                   </div>
                 </div>
@@ -704,7 +714,7 @@ const PersonalPage = ({ newImage }) => {
                   />
                 </Modal>
                 {(isFormUpdated(values) || newImage) && (
-                  <div className="-ml-10 mt-10 fixed bottom-0 bg-white border-t border-gray-300 w-full h-20 flex items-center">
+                  <div className="-ml-10 mt-10 fixed bottom-0 bg-white border-t border-gray-300 w-full h-20 flex items-center z-10">
                     {isFormUpdated(values) && (
                       <button
                         type="submit"

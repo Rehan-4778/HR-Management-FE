@@ -20,7 +20,7 @@ const MyInfoPage = () => {
 
   const reportsToList = useSelector((state) => state?.employee?.reportsToList);
   const companyId = useSelector(
-    (state) => state?.auth?.selectedCompany?.company._id
+    (state) => state?.auth?.selectedCompany?.company?._id
   );
   const [editedImage, setEditedImage] = useState(null);
 

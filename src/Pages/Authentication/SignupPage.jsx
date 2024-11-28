@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Formik } from "formik";
 import signupSchema from "../../formik/schemas/signupSchema";
 import Spacer from "../../components/Custom/Spacer";
@@ -10,10 +11,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
+import countryList from "react-select-country-list";
 
 const SignupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const countryOptions = useMemo(() => countryList().getData(), []);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex justify-center items-center py-10">
@@ -222,16 +226,17 @@ const SignupPage = () => {
                     label={"Country"}
                     name={"country"}
                     value={values.country}
-                    onChange={(val) => setFieldValue("country", val)}
+                    onChange={(val) => {
+                      console.log(val);
+                      setFieldValue("country", val);
+                    }}
                     onBlur={handleBlur}
                     error={errors.country && touched.country && errors.country}
                     options={[
-                      { value: "", label: "Select..." },
-                      { value: "Nigeria", label: "Nigeria" },
-                      { value: "Ghana", label: "Ghana" },
-                      { value: "Kenya", label: "Kenya" },
-                      { value: "South Africa", label: "South Africa" },
+                      { label: "Select Country", value: "" },
+                      ...countryOptions,
                     ]}
+                    labelAsValue={true}
                   />
 
                   <Spacer height="0.3rem" />

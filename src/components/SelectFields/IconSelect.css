@@ -19,7 +19,7 @@
 }
 
 .custom-select-dropdown {
-    @apply absolute w-full bg-white border border-gray-300 shadow-sm z-10 border-t-0;
+    @apply absolute w-full bg-white border border-gray-300 shadow-sm z-[1] border-t-0 max-h-56 overflow-y-scroll;
 }
 
 .custom-select-dropdown.active {
