@@ -186,3 +186,89 @@ export const updateCompanyPermissions = createAsyncThunk(
     }
   }
 );
+
+export const getHolidays = createAsyncThunk(
+  "setting/getHolidays",
+  async ({ companyId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/setting/holidays/${companyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const addHoliday = createAsyncThunk(
+  "setting/addHoliday",
+  async ({ name, date, description, companyId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/setting/holidays`,
+        { name, date, description, companyId },
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const updateHoliday = createAsyncThunk(
+  "setting/updateHoliday",
+  async ({ holidayId, name, date, description }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/setting/holidays/${holidayId}`,
+        { name, date, description },
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const deleteHoliday = createAsyncThunk(
+  "setting/deleteHoliday",
+  async ({ holidayId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/v1/setting/holidays/${holidayId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
