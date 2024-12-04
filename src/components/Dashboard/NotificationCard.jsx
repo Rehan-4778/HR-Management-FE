@@ -37,12 +37,12 @@ const NotificationCard = () => {
         <h2 className="text-lg font-semibold green">
           What's happening at {companyName}
         </h2>
-        <a
+        {/* <a
           href="#"
           className="text-blue-500 text-sm hover:text-tertiary hover:underline"
         >
           Announcements
-        </a>
+        </a> */}
       </div>
       <div className="space-y-4 px-6  h-[400px] overflow-y-scroll">
         {notifications?.map((notification) => (

@@ -686,10 +686,10 @@ const AddEmployee = () => {
                     </span>
                     <div>
                       <h3 className="font-semibold">
-                        Allow Access to HR System
+                        Allow Access to HR Portal
                       </h3>
                       <p className="text-sm mt-1 w-11/12 select-none">
-                        They will be able to login to HR System using the access
+                        They will be able to login to HR Portal using the access
                         level you choose.
                       </p>
                     </div>
@@ -709,7 +709,7 @@ const AddEmployee = () => {
                       <h3 className="font-semibold">No Access</h3>
                       <p className="text-sm mt-1 w-11/12 select-none">
                         They won't have access and will not be able to login to
-                        HR System.
+                        HR Portal.
                       </p>
                     </div>
                   </div>

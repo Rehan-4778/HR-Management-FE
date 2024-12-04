@@ -13,7 +13,7 @@ const Footer = () => {
             <div className="w-1 h-1 rounded-xl bg-gray-500" />
             <span>Terms of Service</span>
           </div>
-          <div className="text-sm text-gray-500">© 2024 Company Name</div>
+          <div className="text-sm text-gray-500">© 3AM Consulting Services</div>
         </div>
         <div>
           {/* logo */}
