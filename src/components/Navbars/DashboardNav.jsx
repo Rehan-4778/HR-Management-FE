@@ -115,7 +115,7 @@ const DashboardNav = () => {
           <FaCog size={25} className=" hover:text-tertiary" />
           {showDropdown && (
             <div
-              className="absolute right-0 top-8 mt-2 w-40 bg-white rounded-br rounded-bl shadow-lg flex flex-col z-50"
+              className="absolute right-0 top-8 mt-2 w-40 bg-white rounded-br rounded-bl shadow-lg flex flex-col"
               ref={dropdownRef}
             >
               <NavLink

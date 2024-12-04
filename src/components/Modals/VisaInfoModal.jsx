@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Formik, Form } from "formik";
 import IconInput from "../InputFields/IconInput";
 import * as Yup from "yup";
 import "./Modal.css";
 import IconSelect from "../SelectFields/IconSelect";
 import { useSelector } from "react-redux";
+import countryList from "react-select-country-list";
 
 const validationSchema = Yup.object({
   //   date: Yup.date().required("Date is required"),
@@ -19,6 +20,7 @@ const VisaInfoModal = ({ isOpen, onClose, onSave, onEdit, visaInfo }) => {
   const { visaType: visaTypeOptions } = useSelector(
     (state) => state?.setting?.employeeFields
   );
+  const countryOptions = useMemo(() => countryList().getData(), []);
 
   const initialValues = visaInfo
     ? {
@@ -88,7 +90,7 @@ const VisaInfoModal = ({ isOpen, onClose, onSave, onEdit, visaInfo }) => {
                   value={values.visaType}
                   error={errors.visaType && touched.visaType}
                 />
-                <IconInput
+                {/* <IconInput
                   width={220}
                   label="Issuing Country"
                   type="text"
@@ -97,7 +99,26 @@ const VisaInfoModal = ({ isOpen, onClose, onSave, onEdit, visaInfo }) => {
                   onBlur={handleBlur}
                   value={values.issuingCountry}
                   error={errors.issuingCountry && touched.issuingCountry}
+                /> */}
+                <IconSelect
+                  width={220}
+                  label="Issuing Country"
+                  type="text"
+                  name="issuingCountry"
+                  onChange={(value) => {
+                    console.log(value);
+                    setFieldValue("issuingCountry", value);
+                  }}
+                  options={[
+                    { label: "Select Country", value: "" },
+                    ...countryOptions,
+                  ]}
+                  labelAsValue={true}
+                  onBlur={handleBlur}
+                  value={values.issuingCountry}
+                  error={errors.issuingCountry && touched.issuingCountry}
                 />
+
                 <IconInput
                   width={220}
                   label="Issued Date"

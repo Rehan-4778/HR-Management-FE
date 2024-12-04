@@ -8,6 +8,7 @@ import {
   updateCompanyInfo,
   getCompanyPermissions,
   updateCompanyPermissions,
+  getHolidays,
 } from "../thunks/settingThunk";
 
 const settingSlice = createSlice({
@@ -18,6 +19,7 @@ const settingSlice = createSlice({
     employeeFields: {},
     companyInfo: {},
     companyPermissions: {},
+    holidays: [],
   },
 
   extraReducers: (builder) => {
@@ -129,6 +131,20 @@ const settingSlice = createSlice({
         state.companyPermissions = action.payload.data;
       })
       .addCase(updateCompanyPermissions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(getHolidays.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getHolidays.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.holidays = action.payload.data;
+      })
+      .addCase(getHolidays.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

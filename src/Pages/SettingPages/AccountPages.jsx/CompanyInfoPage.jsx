@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import IconInput from "../../../components/InputFields/IconInput"; // Adjust the import path based on your project structure
@@ -8,6 +8,7 @@ import { FaPencil } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCompanyInfo } from "../../../store";
 import { toast } from "react-toastify";
+import countryList from "react-select-country-list";
 
 const CompanyInfoPage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +17,7 @@ const CompanyInfoPage = () => {
   const [profilePicFile, setProfilePicFile] = useState(null);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
+  const countryOptions = useMemo(() => countryList().getData(), []);
 
   const selectedCompany = useSelector((state) => state?.auth?.selectedCompany);
   const employeesList = useSelector((state) => state?.employee?.reportsToList);
@@ -203,12 +205,10 @@ const CompanyInfoPage = () => {
                   name="country"
                   onChange={(value) => setFieldValue("country", value)}
                   options={[
-                    { value: "", label: "Select..." },
-                    { value: "Nigeria", label: "Nigeria" },
-                    { value: "Ghana", label: "Ghana" },
-                    { value: "Kenya", label: "Kenya" },
-                    { value: "South Africa", label: "South Africa" },
+                    { label: "Select Country", value: "" },
+                    ...countryOptions,
                   ]}
+                  labelAsValue={true}
                   onBlur={handleBlur}
                   value={values.country}
                   error={touched.country && errors.country}
