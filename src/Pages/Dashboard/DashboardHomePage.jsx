@@ -105,7 +105,10 @@ const DashboardHomePage = () => {
         <div className="flex items-center space-x-4">
           {user?.image ? (
             <img
-              src={user?.image}
+              src={
+                user?.image ||
+                "https://static-00.iconduck.com/assets.00/profile-user-icon-512x512-nm62qfu0.png"
+              }
               alt="user"
               className="w-16 h-16 rounded-full object-cover"
             />

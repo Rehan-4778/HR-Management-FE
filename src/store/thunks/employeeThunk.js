@@ -308,3 +308,24 @@ export const deleteEmployee = createAsyncThunk(
     }
   }
 );
+
+export const getOrganizationChart = createAsyncThunk(
+  "employee/getOrganizationChart",
+  async ({ companyId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/employee/${companyId}/getOrganizationChart`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);

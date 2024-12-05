@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BsFillPeopleFill, BsList, BsPCircle } from "react-icons/bs";
+import { BsFillPeopleFill, BsList } from "react-icons/bs";
 import EmployeeTable from "../../components/Tables/EmployeeTable";
 import { FaPlusCircle } from "react-icons/fa";
 import { VscTypeHierarchySub } from "react-icons/vsc";
@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCompanyEmployeesList } from "../../store";
 import { hideLoading, showLoading } from "../../store/slices/loadingSlice";
+import OrganizationChart from "./OrganizationChart";
 
 const PeoplePage = () => {
   const [activeTab, setActiveTab] = useState("list");
@@ -85,9 +86,15 @@ const PeoplePage = () => {
         </div>
       </div>
 
-      <div className="mt-5">
-        <EmployeeTable data={employeesList} />
-      </div>
+      {activeTab === "list" ? (
+        <div className="mt-5">
+          <EmployeeTable data={employeesList} />
+        </div>
+      ) : (
+        <div className="mt-8">
+          <OrganizationChart />
+        </div>
+      )}
     </div>
   );
 };
