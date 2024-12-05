@@ -16,6 +16,8 @@ const payTypeOptions = [
   { value: "", label: "-Select-" },
   { value: "hourly", label: "Hourly" },
   { value: "salary", label: "Salary" },
+  { value: "daily", label: "Daily " },
+  { value: "PerVisit", label: "Per visit" },
 ];
 
 const payRateUnitOptions = [
