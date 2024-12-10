@@ -14,6 +14,7 @@ import {
   requestSignature,
   getNotifications,
   deleteEmployee,
+  getOrganizationChart,
 } from "../thunks/employeeThunk";
 
 const employeeSlice = createSlice({
@@ -27,6 +28,7 @@ const employeeSlice = createSlice({
     signableDocuments: [],
     reportsToList: [],
     notifications: [],
+    organizationChart: [],
   },
   extraReducers: (builder) => {
     builder.addCase(getCompanyEmployeesList.pending, (state) => {
@@ -209,6 +211,19 @@ const employeeSlice = createSlice({
       state.error = null;
     });
     builder.addCase(deleteEmployee.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error?.message;
+    });
+
+    builder.addCase(getOrganizationChart.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOrganizationChart.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+      state.organizationChart = action.payload.data;
+    });
+    builder.addCase(getOrganizationChart.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error?.message;
     });
