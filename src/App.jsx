@@ -15,6 +15,8 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import OnboardPage from "./Pages/OnboardFlow/OnboardPage";
 import Loader from "./components/Loaders/Loader";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import ForgotPasswordPage from "./Pages/Authentication/ForgetPassword";
+import ResetPasswordPage from "./Pages/Authentication/ResetPassword";
 
 function App() {
   return (
@@ -31,6 +33,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
         <Route
           path="/login/select-company"
           element={
