@@ -56,3 +56,34 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     throw error;
   }
 });
+
+export const forgetPassword = createAsyncThunk(
+  "auth/forgetPassword",
+  async ({ email }) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/auth/forgetpassword`,
+        { email }
+      );
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+// api/v1/auth/resetpassword/:resettoken
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ password, token }) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/auth/resetpassword/${token}`,
+        { password }
+      );
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
