@@ -41,6 +41,28 @@ export const requestTimeOff = createAsyncThunk(
   }
 );
 
+export const deleteTimeOffRequest = createAsyncThunk(
+  "timeOff/deleteTimeOffRequest",
+  async (data) => {
+    const storedState = loadState("storedState");
+    const { companyId, employeeId, requestId } = data;
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/v1/timeOff/${employeeId}/delete-time-off/${requestId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+          data: { companyId },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const getTimeOffDetails = createAsyncThunk(
   "timeOff/getTimeOffDetails",
   async (data) => {

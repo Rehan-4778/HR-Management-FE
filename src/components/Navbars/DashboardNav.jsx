@@ -48,13 +48,19 @@ const DashboardNav = () => {
       {/* Left Section */}
       <div className="flex items-center space-x-4 ">
         {
-          <Link to={`/${companyDomain}/home`}>
-            <img
-              src={companyLogo}
-              alt="Company Logo"
-              className="w-24 h-12 object-contain"
-            />
-          </Link>
+          companyLogo ? (
+            <Link to={`/${companyDomain}/home`}>
+              <img
+                src={companyLogo}
+                alt="Company Logo"
+                className="w-24 h-12 object-contain"
+              />
+            </Link>
+          ) : (
+            <div className="border-dashed border-[1.75px] rounded-sm px-4 py-3 border-gray-500">
+              <h1 className="font-medium text-gray-700">COMPANY LOGO HERE</h1>
+            </div>
+          )
           // <div className="text-2xl font-bold">Logo</div>
         }
         <nav className="flex">
