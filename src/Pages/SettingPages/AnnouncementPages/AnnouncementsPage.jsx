@@ -1,46 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
-import HolidayTable from "../../../components/Tables/HolidayTable";
+import AnnouncementTable from "../../../components/Tables/AnnouncementTable";
 import Modal from "../../../components/Modals/Modal";
-import HolidayModal from "../../../components/Modals/HolidayModal";
+import AnnouncementModal from "../../../components/Modals/AnnouncementModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addHoliday,
-  deleteHoliday,
-  getHolidays,
-  updateHoliday,
+  addAnnouncement,
+  deleteAnnouncement,
+  getAnnouncements,
+  updateAnnouncement,
 } from "../../../store";
 import { toast } from "react-toastify";
 
-const HolidaysPage = () => {
+const AnnouncementsPage = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const headings = ["Holiday", "Date", "Description"];
-  const [editHolidayItem, setEditHolidayItem] = useState(null);
+  const headings = ["Date", "Title", "Description"];
+  const [editAnnouncementItem, setEditAnnouncementItem] = useState(null);
   const companyId = useSelector(
     (state) => state?.auth?.selectedCompany?.company?._id
   );
 
-  const holidays = useSelector((state) => state?.setting?.holidays);
+  const announcements = useSelector((state) => state?.setting?.announcements);
 
   const handleEdit = (item) => {
-    setEditHolidayItem(item);
+    setEditAnnouncementItem(item);
     setIsModalOpen(true);
   };
 
-  const fetchHolidays = async () => {
-    await dispatch(getHolidays({ companyId }));
+  const fetchAnnouncements = async () => {
+    await dispatch(getAnnouncements({ companyId }));
   };
 
   useEffect(() => {
-    fetchHolidays();
+    fetchAnnouncements();
   }, []);
 
   const handleSave = async (values) => {
-    console.log(values);
     const response = await dispatch(
-      addHoliday({
-        name: values.holiday,
+      addAnnouncement({
+        title: values.title,
         date: values.date,
         description: values.description,
         companyId,
@@ -48,19 +47,16 @@ const HolidaysPage = () => {
     );
 
     if (response.payload.success) {
-      console.log(response.payload);
       toast.success(response.payload.message);
-      fetchHolidays();
+      fetchAnnouncements();
     }
   };
 
-  const handleEditHoliday = async (item) => {
-    console.log(editHolidayItem);
-
+  const handleEditAnnouncement = async (item) => {
     const response = await dispatch(
-      updateHoliday({
-        holidayId: editHolidayItem?._id,
-        name: item.holiday,
+      updateAnnouncement({
+        announcementId: editAnnouncementItem?._id,
+        title: item.title,
         date: item?.date,
         description: item.description,
       })
@@ -68,51 +64,51 @@ const HolidaysPage = () => {
 
     if (response.payload.success) {
       toast.success(response.payload.message);
-      fetchHolidays();
+      fetchAnnouncements();
     }
   };
 
   const handleDelete = async (id) => {
-    const response = await dispatch(deleteHoliday({ holidayId: id }));
+    const response = await dispatch(deleteAnnouncement({ announcementId: id }));
 
     if (response.payload.success) {
       toast.success(response.payload.message);
-      fetchHolidays();
+      fetchAnnouncements();
     }
   };
 
   return (
     <div className="w-5/6 mx-auto my-5">
-      <h1 className="text-xl mb-4 font-medium">Holidays</h1>
+      <h1 className="text-xl mb-4 font-medium">Announcements</h1>
       <div className="mt-5">
         <div className="flex items-center justify-end">
           <button
             className="mb-5 border-[1.5px] border-green1 hover:bg-green1 hover:text-white px-4 h-[35px] text-green1 font-medium text-sm rounded-full flex justify-center items-center gap-1"
             onClick={() => {
-              setEditHolidayItem(null);
+              setEditAnnouncementItem(null);
               setIsModalOpen(true);
             }}
           >
             <FaPlusCircle size={14} />
-            Add Holiday
+            Add Announcement
           </button>
         </div>
         <div>
-          <HolidayTable
+          <AnnouncementTable
             headings={headings}
-            list={holidays || []}
+            list={announcements || []}
             allowDelete={true}
             allowEdit={true}
             onDelete={handleDelete}
             onEdit={handleEdit}
           />
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <HolidayModal
+            <AnnouncementModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
-              holiday={editHolidayItem}
+              announcement={editAnnouncementItem}
               onSave={handleSave}
-              onEdit={handleEditHoliday}
+              onEdit={handleEditAnnouncement}
             />
           </Modal>
         </div>
@@ -121,4 +117,4 @@ const HolidaysPage = () => {
   );
 };
 
-export default HolidaysPage;
+export default AnnouncementsPage;

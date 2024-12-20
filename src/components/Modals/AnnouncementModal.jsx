@@ -5,29 +5,26 @@ import * as Yup from "yup";
 import "./Modal.css";
 
 const validationSchema = Yup.object({
-  holiday: Yup.string().required("Holiday name is required"),
-  date: Yup.date().required("Date is required"),
-  // for: Yup.string().required("This field is required"),
-  description: Yup.string().max(
-    500,
-    "Description cannot exceed 500 characters"
-  ),
+  title: Yup.string().required("Title is required"),
+  description: Yup.string()
+    .max(500, "Description cannot exceed 2000 characters")
+    .required("Description is required"),
 });
 
-const HolidayModal = ({ isOpen, onClose, onSave, onEdit, holiday }) => {
-  const initialValues = holiday
+const AnnouncementModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  onEdit,
+  announcement,
+}) => {
+  const initialValues = announcement
     ? {
-        holiday: holiday.name || "",
-        date: holiday.date
-          ? new Date(holiday.date).toISOString().split("T")[0]
-          : "",
-        // for: holiday.for || "All Employees",
-        description: holiday.description || "",
+        title: announcement.title || "",
+        description: announcement.description || "",
       }
     : {
-        holiday: "",
-        date: "",
-        // for: "All Employees",
+        title: "",
         description: "",
       };
 
@@ -36,21 +33,16 @@ const HolidayModal = ({ isOpen, onClose, onSave, onEdit, holiday }) => {
       <div className="modal-background" onClick={onClose}></div>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">
-            {holiday ? "Edit Holiday" : "Add Holiday"}
+          <p className="modal-card-title pe-5">
+            {announcement ? "Edit Announcement" : "Add Announcement"}
           </p>
-          <button
-            className="delete"
-            aria-label="close"
-            onClick={onClose}
-          ></button>
         </header>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             console.log(values);
-            if (holiday) {
+            if (announcement) {
               onEdit(values);
             } else {
               onSave(values);
@@ -71,29 +63,17 @@ const HolidayModal = ({ isOpen, onClose, onSave, onEdit, holiday }) => {
               <div className="modal-card-body">
                 <div className="form-group">
                   <IconInput
-                    width={220}
-                    label="Holiday"
+                    width={300}
+                    label="Title"
                     type="text"
-                    name="holiday"
+                    name="title"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.holiday}
-                    error={errors.holiday && touched.holiday && errors.holiday}
+                    value={values.title}
+                    error={errors.title && touched.title && errors.title}
                   />
                 </div>
-                <div className="form-group">
-                  <IconInput
-                    width={220}
-                    label="Date"
-                    type="date"
-                    name="date"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.date}
-                    error={errors.date && touched.date && errors.date}
-                  />
-                </div>
-                <div className="form-group">
+                <div className="form-group my-2">
                   <IconInput
                     width={300}
                     style={{ height: 100 }}
@@ -136,4 +116,4 @@ const HolidayModal = ({ isOpen, onClose, onSave, onEdit, holiday }) => {
   );
 };
 
-export default HolidayModal;
+export default AnnouncementModal;

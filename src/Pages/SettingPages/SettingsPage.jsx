@@ -7,6 +7,7 @@ import AccessPage from "./AccessPages/AccessPage";
 import { FaGear } from "react-icons/fa6";
 import EmployeeFieldsPage from "./EmployeeFieldsPages/EmployeeFieldsPage";
 import HolidaysPage from "./HolidaysPages/HolidaysPage";
+import AnnouncementsPage from "./AnnouncementPages/AnnouncementsPage";
 // import TimeOffsPage from "./TimeOffsPage";
 
 const SettingsPage = () => {
@@ -25,8 +26,8 @@ const SettingsPage = () => {
             <Route path="/access/*" element={<AccessPage />} />
             <Route path="employees-fields/*" element={<EmployeeFieldsPage />} />
             <Route path="holidays/*" element={<HolidaysPage />} />
-            {/*<Route path="time-offs/*" element={<TimeOffsPage />} />
-            <Route
+            <Route path="announcements/*" element={<AnnouncementsPage />} />
+            {/* <Route
               path="*"
               element={
                 <div>

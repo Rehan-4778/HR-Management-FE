@@ -1,33 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaBullhorn, FaChevronRight, FaSpeakerDeck } from "react-icons/fa";
+import { getAnnouncements } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import User from "../../assets/images/people.png";
 
-const AnnouncementPage = ({ announcement }) => {
-  const announcements = [
-    {
-      name: "Charlotte Abbott",
-      date: "May 31, 2024",
-      description:
-        "I'm requesting 16 hours of Vacation for May 31, 2024 - Jun 3, 2024.",
-    },
-    {
-      name: "Maja Andev",
-      date: "Jun 19, 2024",
-      description:
-        "I'm requesting 40 hours of Vacation for Sep 28, 2024 - Oct 2, 2024.",
-    },
-    {
-      name: "Jennifer Caldwell",
-      date: "Jun 19, 2024",
-      description:
-        "I'm requesting 40 hours of Vacation for Aug 10, 2024 - Aug 14, 2024.",
-    },
-    {
-      name: "Charlotte Abbott",
-      date: "Aug 29, 2024",
-      description:
-        "I'm requesting 40 hours of Vacation for Aug 29, 2024 - Sep 4, 2024.",
-    },
-  ];
+import moment from "moment";
+
+const AnnouncementPage = () => {
+  const dispatch = useDispatch();
+  const companyId = useSelector(
+    (state) => state?.auth?.selectedCompany?.company?._id
+  );
+  const announcements = useSelector((state) => state?.setting?.announcements);
+
+  const fetchAnnouncements = async () => {
+    await dispatch(getAnnouncements({ companyId }));
+  };
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
 
   return (
     <div className="mt-16 px-16 max-w-6xl mx-auto min-h-screen">
@@ -42,26 +34,23 @@ const AnnouncementPage = ({ announcement }) => {
           return (
             <div className="border-b py-3 hover:bg-gray-50 ">
               <div className="flex gap-5 px-5 items-center">
-                <img
-                  src="https://static-00.iconduck.com/assets.00/profile-user-icon-512x512-nm62qfu0.png"
-                  alt="avatar"
-                  className="w-8 h-8 rounded-full"
-                />
-
-                {/* Main Content */}
-                <div className="w-full flex justify-between items-center">
+                <div className="self-start mt-2">
+                  <img
+                    src={announcement?.createdBy?.image || User}
+                    alt="image"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                </div>
+                <div className="flex justify-between items-center">
                   <div>
-                    {/* Name */}
                     <p className="font-medium text-black">
-                      {announcement?.name}
+                      {announcement?.title}
                     </p>
-                    {/* Date */}
                     <p className="text-[13px] text-gray-600">
-                      {announcement?.date}
+                      {moment(announcement?.createdAt).format("M/D/Y hh:mm a")}
                     </p>
-                    {/* Description */}
                     {announcement.description && (
-                      <p className="text-[12px] text-gray-500 mt-1">
+                      <p className="text-[12px] text-gray-500 mt-1 break-words w-[50%]">
                         {announcement?.description}
                       </p>
                     )}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { FaSearch, FaBell, FaCog } from "react-icons/fa";
+import { FaSearch, FaBell, FaCog, FaBullhorn } from "react-icons/fa";
 import "./DashboardNav.css";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -108,6 +108,9 @@ const DashboardNav = () => {
           />
           <FaSearch className="absolute top-2.5 left-3 text-gray-500" />
         </div>
+        <NavLink className="icon-button" to={`/${companyDomain}/announcements`}>
+          <FaBullhorn size={25} className=" text-tertiary" />
+        </NavLink>
         <NavLink className="icon-button" to={`/${companyDomain}/requests`}>
           <FaInbox size={25} className=" text-tertiary" />
         </NavLink>
