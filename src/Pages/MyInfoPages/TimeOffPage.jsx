@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import EmployeeDetailTable from "../../components/Tables/EmployeeDetailTable";
 import Modal from "../../components/Modals/Modal";
 import { toast } from "react-toastify";
-import { getTimeOffRequests } from "../../store";
+import { deleteTimeOffRequest, getTimeOffRequests } from "../../store";
 import TimeOffTable from "../../components/Tables/TimeOffTable";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { RiCalendarScheduleFill } from "react-icons/ri";
@@ -24,6 +24,9 @@ const timeOffHeadings = [
 ];
 
 const TimeOffPage = () => {
+  const [scheduledList, setScheduledList] = useState([]);
+  const [historyList, setHistoryList] = useState([]);
+
   const dispatch = useDispatch();
   const companyId = useSelector(
     (state) => state?.auth?.selectedCompany?.company?._id
@@ -54,6 +57,38 @@ const TimeOffPage = () => {
     fetchTimeOffHistory();
   }, [companyId, employeeId]);
 
+  useEffect(() => {
+    if (timeOffList) {
+      const today = new Date();
+
+      const transformedHolidays =
+        timeOffList?.holidayList?.map((holiday) => ({
+          leaveType: { name: "Holiday" },
+          startDate: holiday.date,
+          endDate: holiday.date,
+          hoursPerDay: [{ date: holiday.date, hours: 8 }],
+          note: holiday.description || "",
+          status: "Approved",
+        })) || [];
+
+      const pastHolidays = transformedHolidays.filter(
+        (holiday) => new Date(holiday.startDate) < today
+      );
+
+      console.log(pastHolidays, "Past holidays");
+
+      setHistoryList((prev) => [ ...(timeOffList?.history || []), ...pastHolidays]);
+
+      const upcomingHolidays = transformedHolidays.filter(
+        (holiday) => new Date(holiday.startDate) >= today
+      );
+      setScheduledList([
+        ...(timeOffList?.scheduled || []),
+        ...upcomingHolidays,
+      ]);
+    }
+  }, [timeOffList]);
+
   const initialValues = {
     leaveType: "",
     fromDate: "",
@@ -71,6 +106,17 @@ const TimeOffPage = () => {
     note: Yup.string(),
     status: Yup.string().oneOf(["Pending", "Approved", "Denied"]).required(),
   });
+
+  const handleCancelRequest = async (requestId) => {
+    const response = await dispatch(
+      deleteTimeOffRequest({ companyId, employeeId, requestId })
+    );
+
+    if (response?.payload?.success) {
+      toast.success(response?.payload?.message);
+      fetchTimeOffHistory();
+    }
+  };
 
   return (
     <div className="py-5 px-10">
@@ -95,9 +141,9 @@ const TimeOffPage = () => {
               </div>
               <TimeOffTable
                 headings={timeOffHeadings}
-                list={
-                  timeOffList?.scheduled?.length ? timeOffList?.scheduled : []
-                }
+                list={scheduledList || []}
+                allowDelete={true && timeOffList?.isAllowedToDelete}
+                onDelete={handleCancelRequest}
               />
               <div className="flex justify-between items-center border-t border-gray-400 my-5 pt-5">
                 <div className="flex gap-3">
@@ -107,7 +153,7 @@ const TimeOffPage = () => {
               </div>
               <TimeOffTable
                 headings={timeOffHeadings}
-                list={timeOffList?.history?.length ? timeOffList?.history : []}
+                list={historyList || []}
               />
             </Form>
           )}

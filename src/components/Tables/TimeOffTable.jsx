@@ -41,11 +41,11 @@ const TimeOffTable = ({
                 {heading}
               </th>
             ))}
-            {/* {(allowDelete || allowEdit) && (
+            {(allowDelete || allowEdit) && (
               <th className="py-5 text-left font-semibold text-[15px] text-gray-700 last:rounded-tr-sm rounded-br-sm">
                 Actions
               </th>
-            )} */}
+            )}
           </tr>
         </thead>
         <tbody>
@@ -126,27 +126,28 @@ const TimeOffTable = ({
 
               {(allowDelete || allowEdit) && (
                 <td className="px-1 text-sm py-4 border-b border-gray-200">
-                  {hoveredRowIndex === rowIndex && (
-                    <div>
-                      {allowEdit && (
-                        <button
-                          type="button"
-                          className="mr-3"
-                          onClick={() => onEdit(item)}
-                        >
-                          <FaEdit className="text-gray-600" size={18} />
-                        </button>
-                      )}
-                      {allowDelete && (
-                        <button
-                          type="button"
-                          onClick={() => onDelete(item._id)}
-                        >
-                          <FaTrash className="text-gray-600" size={16} />
-                        </button>
-                      )}
-                    </div>
-                  )}
+                  {hoveredRowIndex === rowIndex &&
+                    item?.leaveType?.name !== "Holiday" && (
+                      <div>
+                        {allowEdit && (
+                          <button
+                            type="button"
+                            className="mr-3"
+                            onClick={() => onEdit(item)}
+                          >
+                            <FaEdit className="text-gray-600" size={18} />
+                          </button>
+                        )}
+                        {allowDelete && (
+                          <button
+                            type="button"
+                            onClick={() => onDelete(item._id)}
+                          >
+                            <FaTrash className="text-gray-600" size={16} />
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </td>
               )}
             </tr>

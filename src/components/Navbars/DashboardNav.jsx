@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { FaSearch, FaBell, FaCog } from "react-icons/fa";
+import { FaSearch, FaBell, FaCog, FaBullhorn } from "react-icons/fa";
 import "./DashboardNav.css";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -48,13 +48,19 @@ const DashboardNav = () => {
       {/* Left Section */}
       <div className="flex items-center space-x-4 ">
         {
-          <Link to={`/${companyDomain}/home`}>
-            <img
-              src={companyLogo}
-              alt="Company Logo"
-              className="w-24 h-12 object-contain"
-            />
-          </Link>
+          companyLogo ? (
+            <Link to={`/${companyDomain}/home`}>
+              <img
+                src={companyLogo}
+                alt="Company Logo"
+                className="w-24 h-12 object-contain"
+              />
+            </Link>
+          ) : (
+            <div className="border-dashed border-[1.75px] rounded-sm px-4 py-3 border-gray-500">
+              <h1 className="font-medium text-gray-700">COMPANY LOGO HERE</h1>
+            </div>
+          )
           // <div className="text-2xl font-bold">Logo</div>
         }
         <nav className="flex">
@@ -102,6 +108,9 @@ const DashboardNav = () => {
           />
           <FaSearch className="absolute top-2.5 left-3 text-gray-500" />
         </div>
+        <NavLink className="icon-button" to={`/${companyDomain}/announcements`}>
+          <FaBullhorn size={25} className=" text-tertiary" />
+        </NavLink>
         <NavLink className="icon-button" to={`/${companyDomain}/requests`}>
           <FaInbox size={25} className=" text-tertiary" />
         </NavLink>

@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCompanyEmployeeFields, getCompanyEmployeeNames } from "../../store";
 import RequestPage from "../RequestPages/RequestPage";
 import FilesPage from "../FilesPages/FilesPage";
+import AnnouncementPage from "../AnnouncementPages/AnnouncementPage";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Dashboard = () => {
         <Route path="/settings/*" element={<SettingsPage />} />
         <Route path="/requests/*" element={<RequestPage />} />
         <Route path="/files" element={<FilesPage />} />
+        <Route path="/announcements" element={<AnnouncementPage />} />
       </Routes>
       <Footer />
     </div>

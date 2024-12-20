@@ -7,6 +7,7 @@ import {
   FaClipboardList,
   FaCalendarAlt,
   FaUserCheck,
+  FaBullhorn,
 } from "react-icons/fa";
 
 const SettingPrimaryNav = () => {
@@ -40,11 +41,11 @@ const SettingPrimaryNav = () => {
       icon: <FaCalendarAlt className="text-gray-600" size={18} />,
       activeIcon: <FaCalendarAlt className="text-white" size={18} />,
     },
-    // {
-    //   name: "Time Offs",
-    //   icon: <FaCalendarAlt className="text-gray-600" size={18} />,
-    //   activeIcon: <FaCalendarAlt className="text-white" size={18} />,
-    // },
+    {
+      name: "Announcements",
+      icon: <FaBullhorn className="text-gray-600" size={18} />,
+      activeIcon: <FaBullhorn className="text-white" size={18} />,
+    },
   ];
 
   return (

@@ -85,7 +85,9 @@ const AddEmployee = () => {
   const payTypeOptions = [
     { value: "", label: "-Select--" },
     { value: "hourly", label: "Hourly" },
-    { value: "salaried", label: "Salaried" },
+    { value: "salary", label: "Salary" },
+    { value: "daily", label: "Daily " },
+    { value: "PerVisit", label: "Per visit" },
   ];
 
   const ethnicityOptions = [

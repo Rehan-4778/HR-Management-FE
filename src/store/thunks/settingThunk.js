@@ -272,3 +272,89 @@ export const deleteHoliday = createAsyncThunk(
     }
   }
 );
+
+export const getAnnouncements = createAsyncThunk(
+  "setting/getAnnouncements",
+  async ({ companyId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/setting/announcements/${companyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const addAnnouncement = createAsyncThunk(
+  "setting/addAnnouncement",
+  async ({ title, description, companyId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/setting/announcements`,
+        { title, description, companyId },
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const updateAnnouncement = createAsyncThunk(
+  "setting/updateAnnouncement",
+  async ({ announcementId, title, description }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/v1/setting/announcements/${announcementId}`,
+        { title, description },
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
+
+export const deleteAnnouncement = createAsyncThunk(
+  "setting/deleteAnnouncement",
+  async ({ announcementId }) => {
+    const storedState = loadState("storedState");
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/v1/setting/announcements/${announcementId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedState.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return error.response.data;
+    }
+  }
+);
