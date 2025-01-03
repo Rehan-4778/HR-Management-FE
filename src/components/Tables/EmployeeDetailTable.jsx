@@ -69,8 +69,9 @@ const EmployeeDetailTable = ({
                           item[key] ? (
                           new Date(item[key])?.toLocaleDateString()
                         ) : key === "payRate" ? (
-                          "$" + item[key] + "/" + item["payRateUnit"]
+                          "$" + item[key]
                         ) : (
+                          //  + "/" + item["payRateUnit"]
                           item[key]
                         )}
                       </td>

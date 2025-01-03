@@ -322,7 +322,11 @@ const RequestTimeOffPage = ({ payScheduleOptions, payTypeOptions }) => {
             >
               Send Request
             </button>
-            <button type="button" className="text-danger">
+            <button
+              type="button"
+              className="text-danger"
+              onClick={() => navigate(`/${companyDomain}/home`)}
+            >
               Cancel
             </button>
           </div>
