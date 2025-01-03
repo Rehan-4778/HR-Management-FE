@@ -24,11 +24,20 @@ const TimeLogTable = ({
   ) => {
     const clockInTime = new Date(clockIn);
     const clockOutTime = new Date(clockOut);
-    const breakStartTime = new Date(breakStart);
-    const breakEndTime = new Date(breakEnd);
+    const breakStartTime = breakStart ? new Date(breakStart) : null;
+    const breakEndTime = breakEnd ? new Date(breakEnd) : null;
+
+    console.log("----------------------------------------------");
+    console.log(clockInTime, clockOutTime, breakStartTime, breakEndTime);
+    console.log("----------------------------------------------");
 
     const workDuration = (clockOutTime - clockInTime) / (1000 * 60 * 60); // in hours
-    const breakDuration = (breakEndTime - breakStartTime) / (1000 * 60 * 60); // in hours
+
+    // Only calculate breakDuration if both breakStartTime and breakEndTime exist
+    const breakDuration =
+      breakStartTime && breakEndTime
+        ? (breakEndTime - breakStartTime) / (1000 * 60 * 60)
+        : 0;
 
     return (workDuration - breakDuration).toFixed(2); // total working hours
   };
@@ -73,10 +82,10 @@ const TimeLogTable = ({
                 {item.clockIn ? formatTime(item.clockIn) : ""}
               </td>
               <td className="px-1 text-sm py-4 border-b border-gray-200 font-medium text-gray-700">
-                {item.breakStart ? formatTime(item.breakStart) : ""}
+                {item.breakStart ? formatTime(item.breakStart) : "-"}
               </td>
               <td className="px-1 text-sm py-4 border-b border-gray-200 font-medium text-gray-700">
-                {item.breakEnd ? formatTime(item.breakEnd) : ""}
+                {item.breakEnd ? formatTime(item.breakEnd) : "-"}
               </td>
               <td className="px-1 text-sm py-4 border-b border-gray-200 font-medium text-gray-700">
                 {item.clockOut ? formatTime(item.clockOut) : ""}

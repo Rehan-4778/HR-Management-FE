@@ -20,11 +20,11 @@ const payTypeOptions = [
   { value: "PerVisit", label: "Per visit" },
 ];
 
-const payRateUnitOptions = [
-  { value: "", label: "-Select-" },
-  { value: "hour", label: "Per Hour" },
-  { value: "year", label: "Per Year" },
-];
+// const payRateUnitOptions = [
+//   { value: "", label: "-Select-" },
+//   { value: "hour", label: "Per Hour" },
+//   { value: "year", label: "Per Year" },
+// ];
 
 const overtimeOptions = [
   { value: "Exempt", label: "Exempt" },
@@ -38,7 +38,7 @@ const validationSchema = Yup.object({
   payRate: Yup.number()
     .required("Pay rate is required")
     .positive("Pay rate must be positive"),
-  payRateUnit: Yup.string().required("Pay rate unit is required"),
+  // payRateUnit: Yup.string().required("Pay rate unit is required"),
   overtime: Yup.string().required("Overtime status is required"),
   changeReason: Yup.string().required("Change reason is required"),
   comment: Yup.string(),
@@ -57,7 +57,7 @@ const CompensationModal = ({
         paySchedule: compensation.paySchedule || "",
         payType: compensation.payType || "",
         payRate: compensation.payRate || "",
-        payRateUnit: compensation.payRateUnit || "",
+        // payRateUnit: compensation.payRateUnit || "",
         overtime: compensation.overtime || "",
         changeReason: compensation.changeReason || "",
         comment: compensation.comment || "",
@@ -67,7 +67,7 @@ const CompensationModal = ({
         paySchedule: "",
         payType: "",
         payRate: "",
-        payRateUnit: "",
+        // payRateUnit: "",
         overtime: "Exempt",
         changeReason: "",
         comment: "",
@@ -160,7 +160,7 @@ const CompensationModal = ({
                   value={values.payRate}
                   error={errors.payRate && touched.payRate}
                 />
-                <IconSelect
+                {/* <IconSelect
                   width={220}
                   label="Pay Rate Unit"
                   name="payRateUnit"
@@ -169,7 +169,7 @@ const CompensationModal = ({
                   onBlur={handleBlur}
                   value={values.payRateUnit}
                   error={errors.payRateUnit && touched.payRateUnit}
-                />
+                /> */}
                 <IconSelect
                   width={220}
                   label="Overtime"
