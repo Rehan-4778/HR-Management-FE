@@ -17,6 +17,7 @@ import {
 import { toast } from "react-toastify";
 import { Select } from "@mui/material";
 import countryList from "react-select-country-list";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddEmployee = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +27,8 @@ const AddEmployee = () => {
   const [reportsToList, setReportsToList] = useState([]);
   const formikRef = useRef(null);
   const countryOptions = useMemo(() => countryList().getData(), []);
+  const navigate = useNavigate();
+  const { companyDomain } = useParams();
 
   const {
     department: departmentOptions,
@@ -243,7 +246,7 @@ const AddEmployee = () => {
             paySchedule: "",
             payType: "",
             payRate: "",
-            payRateUnit: "",
+            // payRateUnit: "",
             ethnicity: "",
             workPhone: "",
             mobilePhone: "",
@@ -497,7 +500,7 @@ const AddEmployee = () => {
                     value={values.payRate}
                     error={errors.payRate && touched.payRate}
                   />
-                  <div className="flex mt-5">
+                  {/* <div className="flex mt-5">
                     <p className="text-sm mt-3 mx-4 text-gray-500">per</p>
                     <IconSelect
                       width={200}
@@ -508,7 +511,7 @@ const AddEmployee = () => {
                       value={values.payRateUnit}
                       error={errors.payRateUnit && touched.payRateUnit}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <IconSelect
                   width={250}
@@ -737,7 +740,7 @@ const AddEmployee = () => {
                 )}
                 <button
                   className="text-danger h-[38px] rounded font-medium"
-                  onClick={() => resetForm()}
+                  onClick={() => navigate(`/${companyDomain}/employees/list`)}
                 >
                   Cancel
                 </button>
